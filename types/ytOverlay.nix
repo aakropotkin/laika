@@ -1,19 +1,15 @@
 # ============================================================================ #
 #
-# Nixpkgs Overlay.
-# Adds FS types to `lib.ytypes'.
+# Ytypes Overlay.
+# Adds FS types.
 # Only depends on `ytypes.{Prim,Core}'.
+#
+# NOTE: `ytypes' is a member of `<pkgs>.lib.ytypes'.
 #
 # ---------------------------------------------------------------------------- #
 
 final: prev: {
-
-  lib = prev.lib.extend ( _: prevLib: {
-    ytypes = prevLib.ytypes // {
-      FS = import ./fs.nix { inherit (prevLib) ytypes; };
-    };
-  } );
-
+  FS = import ./fs.nix { ytypes = { inherit (final) Prim Core; }; };
 }
 
 
