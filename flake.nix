@@ -6,7 +6,7 @@
     overlays.default = final: prev:
       ak-nix.lib.composeExtensions ak-nix.overlays.default overlays.laika;
 
-    ytOverlays.laika   = import ./types/ytOverlay;
+    ytOverlays.laika   = import ./types/overlay.yt.nix;
     ytOverlays.default = ytOverlays.laika;
 
     libOverlays.laika = final: prev: {
