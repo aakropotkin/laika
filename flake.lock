@@ -5,11 +5,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1666243146,
-        "narHash": "sha256-X1YVpNA+2pEe3jbPv1/fwbQNHURz4+5eyLc9Xb9xZZk=",
+        "lastModified": 1666405571,
+        "narHash": "sha256-UO1+VvbndgQibUdH+XJnJgmK+FavqAXxut+JoteyWk0=",
         "owner": "aakropotkin",
         "repo": "ak-nix",
-        "rev": "3ac2a43faee292f326224403a0bf518b7784907b",
+        "rev": "9cfb91271b9bffc01a2156330c5f5c437a8212f5",
         "type": "github"
       },
       "original": {
