@@ -7,7 +7,7 @@
 { ytypes }: let
 
   lib.test = patt: s: ( builtins.match patt s ) != null;
-  yt = ytypes.Prim // ytypes.Core;
+  yt = ytypes // ytypes.Prim // ytypes.Core;
   inherit (yt) restrict string either eitherN sum;
 
 # ---------------------------------------------------------------------------- #
@@ -31,6 +31,7 @@
 
 # ---------------------------------------------------------------------------- #
 
+  # TODO: `realpath'/`logicalpath' ( contains ".." ).
   Strings = {
 
     filename = let
@@ -38,8 +39,7 @@
       reservedCond = x: ( x != "." ) && ( x != ".." );
     in restrict "filename" ( x: ( charsCond x ) && ( reservedCond x ) ) string;
 
-    path = restrict "path" ( lib.test "[${RE.uri_filename_c}][${RE.path_c}]*" )
-                           string;
+    path = restrict "path" ( lib.test "[${RE.path_c}]*" ) string;
 
     abspath = restrict "absolute" ( lib.test "/.*" )    Strings.path;
     relpath = restrict "relative" ( lib.test "[^/].*" ) Strings.path;
@@ -53,7 +53,19 @@
 
   Eithers = {
 
-    abspath = either Strings.abspath yt.Prim.path;
+    abspath = ( either Strings.abspath yt.Prim.path ) // {
+      name = "abspath";
+      toError = v: result: let
+        pv = yt.__internal.prettyPrint v;
+        common = "Expected an absolute path ( string or path primitive ), ";
+        wrongType =
+          common + "but value '${pv}' is of type '${builtins.typeOf v}'.";
+        notAbs =
+          common + "but pathlike string '${toString v}' is not absolute.";
+        cp = Strings.path.checkType v;
+      in if ! ( builtins.isString v ) then wrongType else
+         if cp.ok then notAbs else cp.err;
+    };
 
     store_path = let
       cond = x: Strings.store_path.check ( toString x );
