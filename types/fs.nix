@@ -44,7 +44,42 @@
     abspath = restrict "absolute" ( lib.test "/.*" )    Strings.path;
     relpath = restrict "relative" ( lib.test "[^/].*" ) Strings.path;
 
+    store_path = restrict "store" ( lib.test "/nix/store/.*" ) Strings.abspath;
+
   };  # End Strings
+
+
+# ---------------------------------------------------------------------------- #
+
+  Eithers = {
+
+    abspath = either Strings.abspath yt.Prim.path;
+
+    store_path = let
+      cond = x: Strings.store_path.check ( toString x );
+    in either Strings.store_path ( restrict "store" cond yt.Prim.path );
+
+  };  # End Eithers
+
+
+# ---------------------------------------------------------------------------- #
+
+  Enums = {
+
+    inode_type = yt.enum "inode:type" [
+      "directory" "regular" "symlink" "unknown"
+    ];
+
+  };  # End Enums
+
+
+# ---------------------------------------------------------------------------- #
+
+  FunctionSigs = {
+
+    filter = [Strings.path Enums.inode_type yt.bool];
+
+  };  # End FunctionSigs
 
 
 # ---------------------------------------------------------------------------- #
@@ -54,6 +89,18 @@ in {
   inherit
     RE
     Strings
+    Eithers
+    FunctionSigs
+    Enums
+  ;
+
+  inherit (Strings)
+    filename
+  ;
+
+  inherit (Eithers)
+    abspath
+    store_path
   ;
 
 }

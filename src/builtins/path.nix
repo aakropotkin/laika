@@ -7,7 +7,7 @@
 { lib }: let
   yt = lib.ytypes // lib.ytypes.Prim // lib.ytypes.Core;
   inherit (yt) option struct either function bool string;
-  inherit (yt.fs) filename;
+  inherit (yt.fs) filename abspath store_path;
 
 # ---------------------------------------------------------------------------- #
 
@@ -15,20 +15,18 @@
     from = "builtins";
     name = "path";
 
+    # As a function signature
     inputs = let
-      args = struct "${self.from}.${self.name}:args" {
-        name      = option filename;
-        path      = true;
-        resolved  = true;
-        filter    = true;
-        recursive = true;
-        sha256    = true;
-        outPath   = true;
+      arg1 = struct "${self.from}.${self.name}:args" {
+        name      = option filename;   # FIXME: nix store pathname restrictions
+        path      = abspath;
+        filter    = option function;
+        recursive = option bool;
+        sha256    = option yt.Hash.sha256;
       };
-    in [args];
+    in [arg1];
 
-    outputs = {
-    };
+    outputs = yt.fs.store_path;
 
     function = builtins.path;
   };
