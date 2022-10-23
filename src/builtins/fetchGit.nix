@@ -19,8 +19,8 @@
 
     __functionMeta = {
       name      = "fetchGitW";
-      innerName = "fetchGit";
       from      = "builtins";
+      innerName = "fetchGit";
 
       signature = let
         # FIXME: Handle pure
@@ -86,6 +86,8 @@
       builtins.intersectAttrs ( self.__thunk // args ) self.__functionArgs;
     in if builtins.isString x then inner { url = x; } else inner x;
 
+    # FIXME: YANTS' `defun' sucks for this because it botches our fn names.
+    # Run the typecheck manually.
     __functor = self: args: let
       unchecked = self.__innerFunction ( self.__processArgs args );
       checked   = yt.defun fetchGitW.__functionMeta.signature unchecked;

@@ -1,0 +1,138 @@
+#+TITLE: Laika
+
+Nix fetcher abstractions.
+
+* Wrapper Features
+** Function Argument Reading
+Laika provides wrapped forms of Nix's builtin fetchers which allow routines
+such as =lib.functionArgs= to "do what they're supposed to do".
+
+These work by pushing builtins into an attrset with a =__functor= and
+=__functionArgs= field so that the routine is called normally, while
+providing the argument info needed by =lib.functionArgs=.
+
+*** Polymorphic Arguments
+:PROPERTIES:
+:ID:       42f15723-f75c-4f02-9938-49d9a9ebd361
+:END:
+Many builtin functions are polymorphic, and our =__functionArgs= field
+aims to list the most permissive collection of arguments accepted.
+If you want to know specific combinations of acceptable args please
+refer to the type signatures defined in =__functionMeta.signature=.
+
+Additionally, the =__functionArgs= field only lists arguments for
+attrset arguments.
+In cases where other/multiple types of arguments such as =string= are
+accepted, you will need to refer to =__functionMeta.signature= to get
+insight on acceptable arguments to be passed.
+See the section [[Type Checking]] for more info.
+
+Please note that some =__functionArgs= values are effected by runtime
+context, for example =pure= mode.
+See the section [[Dynamic Context]] for more info.
+
+** Type Checking
+Wrappers carry a =__functionMeta.signature= field which contains a list of
+YANTS types ( provided by the =ak-nix= fork: =ytypes= ) representing the
+function "prototype".
+
+For example for the function =inc= our signature will be =int -> int=,
+meaning "a function which accepts an integer and returns an integer".
+
+Another example =sum= would be =int -> int -> int=, being a function which
+accepts two integers and returns an integer.
+
+This function signature is a useful tool not only for type checking, but
+also for documentation and "auto-calling" functions with correct
+combinations of arguments.
+
+Many of Nix's builtins are polymorphic, for example =builtins.fetchGit=
+which accepts either a string, or an attrset, and these signatures help us
+keep track of our available argument combinations.
+
+*** Enabling/Disabling
+Runtime type-checking can be enabled/disabled across =laika= or on a per
+function basis to suit the performance or strictness requirements your use
+case calls for.
+
+Personally I find these type-checks most useful in =nix flake check=
+contexts or test suits, while in "production" after we already know a
+locked build will succeed I turn them off to speed up evaluation for
+package consumers.
+
+Each fetcher defined in [[./src]] accepts a boolean argument =typecheck=
+which can be overridden to control this feature.
+Even if type checking is disabled, the field =__functionMeta.signature=
+will still exist for reference by other utilities.
+
+** Dynamic Context
+Many builtin functions are effected by runtime environment settings, for
+example =pure= mode, and our wrappers
+
+These settings are always controlled by a boolean argument at the top of
+each fetcher's definition in [[./src]], and if a function is effected by
+context this will be recorded in =__functionMeta.properties.*= tags.
+
+* Wrapper Conventions
+** Helper Functions as Fields
+All wrappers are implemented as /functors/, meaning attrsets which can be
+used as functions with =self= reference.
+For folks that aren't familiar with /Functional Programming/ a useful
+comparison is an /Object/ in JavaScript, or a /Class/ in C++ or Python.
+
+Because functors have a single entry point, =__functor= which can read
+arbitrary fields in =self=, we have the ability to split up routines into
+helper functions stored as fields.
+
+This is largely done for organization, but another useful advantage to
+using these fields is that we can easily override or modify parts of an
+existing function to repurpose it.
+You can think of this as being similar to overriding =buildPhase= or adding
+a =preInstall= hook in a =nixpkgs#stdenv.mkDerivation= attrset.
+
+In practice almost all of the fetchers in =laika= use the same =__functor=
+definition, and their differences in behavior is handled in helpers - this
+is what allows us to easily add new "layers" or disable features such as
+type checking across the codebase with a single setting.
+
+*** Example
+An example of these helpers in action is this set which handles polymorphic
+arguments for =builtins.fetchGit=, and injection of a custom hook.
+
+#+BEGIN_SRC nix
+  { lib }:
+  let
+    pp = lib.generators.toPretty {};
+    fetchGitW = {
+      __innerFunction = builtins.fetchGit;
+      # Allows `lib.functionArgs' and `lib.callWith' to work.
+      __functionArgs = { url = false; name = true; /* ... */ };
+      # Stashes "auto-args".
+      __thunk = { submodules = false; shallow = false; allRefs = false; };
+      # Convert strings to attrs, and add our auto-args.
+      __processArgs = self: x: let
+        args = if builtins.isString x then { url = x; } else x;
+        # Filter args down to what is accepted by `builtins.fetchGit'.
+        # This is implemented the same way as
+        # `nixpkgs#lib.callPackageWith' except we omit the `override' and
+        # `overrideDerivation' additions.
+      in lib.canPassStrict self.__innerFunction ( self.__thunk // args );
+      # The function entry point ends up being minimal.
+      __functor = self: x:
+          self.__innerFunction ( self.__processArgs x );
+    };
+    # Customize the fetcher with new auto-args and add logging.
+    myGitFetcher = fetchGitW // {
+      __thunk = fetchGitW.__thunk // { allRefs = true; };
+      # Hook the arg processor with a trace, then return the args produced
+      # by the original `fetchGitW'.
+      __processArgs = self: x: let
+        args = fetchGitW.__processArgs self x;  # parent/super call.
+      in builtins.trace ''
+          myGitFetcher ${pp args};
+        '' args;
+    };
+  in myGitFetcher "git+ssh://git@github.com/aakropotkin/laika.git"
+#+END_SRC
+
+**
