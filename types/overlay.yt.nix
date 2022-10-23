@@ -7,8 +7,8 @@
 # ---------------------------------------------------------------------------- #
 
 final: prev: {
-  FS    = import ./fs.nix         { ytypes = final; };
-  Fetch = import ./sourceInfo.nix { ytypes = final; };
+  FS         = import ./fs.nix         { ytypes = final; };
+  SourceInfo = import ./sourceInfo.nix { ytypes = final; };
 }
 
 

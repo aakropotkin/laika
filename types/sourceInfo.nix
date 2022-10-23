@@ -36,15 +36,15 @@
   in {
 
     # The most detailed record.
-    sourceInfo_git = struct "sourceInfo:git" siFields;
+    git = struct "sourceInfo:git" siFields;
 
-    sourceInfo_github = struct "sourceInfo:github" {
+    github = struct "sourceInfo:github" {
       inherit (siFields)
         outPath narHash lastModified lastModifiedDate rev shortRev
       ;
     };
 
-    sourceInfo_sourcehut = struct "sourceInfo:sourcehut" {
+    sourcehut = struct "sourceInfo:sourcehut" {
       inherit (siFields)
         outPath narHash lastModified lastModifiedDate rev shortRev
       ;
@@ -52,22 +52,22 @@
 
     # You need to install `nix profile install nixpkgs#mercurial' first.
     # builtins.fetchTree { url = "https://www.mercurial-scm.org/repo/hello"; type = "hg"; }
-    sourceInfo_mercurial = struct "sourceInfo:mercurial" {
+    mercurial = struct "sourceInfo:mercurial" {
       inherit (siFields)
         outPath narHash rev revCount shortRev
       ;
     };
 
-    sourceInfo_path = struct "sourceInfo:path" {
+    path = struct "sourceInfo:path" {
       inherit (siFields) outPath narHash lastModified lastModifiedDate;
     };
 
-    sourceInfo_file = struct "sourceInfo:file" {
+    file = struct "sourceInfo:file" {
       inherit (siFields) outPath narHash;
     };
 
     # Same as `file'.
-    sourceInfo_tarball = struct "sourceInfo:tarball" {
+    tarball = struct "sourceInfo:tarball" {
       inherit (siFields) outPath narHash;
     };
 
@@ -79,13 +79,13 @@
   Eithers = {
 
     sourceInfo = ( eitherN [
-      Structs.sourceInfo_git
-      Structs.sourceInfo_github
-      Structs.sourceInfo_sourcehut
-      Structs.sourceInfo_mercurial
-      Structs.sourceInfo_path
-      Structs.sourceInfo_file
-      Structs.sourceInfo_tarball
+      Structs.git
+      Structs.github
+      Structs.sourcehut
+      Structs.mercurial
+      Structs.path
+      Structs.file
+      Structs.tarball
     ] ) // {
       name    = "sourceInfo";
       toError = v: result: let
@@ -98,7 +98,7 @@
       in common + why;
     };
 
-    sourceInfo_indirect = Eithers.sourceInfo;
+    indirect = Eithers.sourceInfo;
 
   };
 
@@ -108,17 +108,17 @@
 in {
   inherit Structs Eithers;
   inherit (Structs)
-    sourceInfo_git
-    sourceInfo_github
-    sourceInfo_sourcehut
-    sourceInfo_mercurial
-    sourceInfo_path
-    sourceInfo_file
-    sourceInfo_tarball
+    git
+    github
+    sourcehut
+    mercurial
+    path
+    file
+    tarball
   ;
   inherit (Eithers)
     sourceInfo
-    sourceInfo_indirect
+    indirect
   ;
 }
 
