@@ -98,6 +98,7 @@ type checking across the codebase with a single setting.
 *** Example
 An example of these helpers in action is this set which handles polymorphic
 arguments for =builtins.fetchGit=, and injection of a custom hook.
+This is a condensed form of the real definition, but a useful reference nonetheless. 
 
 #+BEGIN_SRC nix
   { lib }:
@@ -129,10 +130,8 @@ arguments for =builtins.fetchGit=, and injection of a custom hook.
       __processArgs = self: x: let
         args = fetchGitW.__processArgs self x;  # parent/super call.
       in builtins.trace ''
-          myGitFetcher ${pp args};
-        '' args;
+        myGitFetcher ${pp args};
+      '' args;
     };
   in myGitFetcher "git+ssh://git@github.com/aakropotkin/laika.git"
 #+END_SRC
-
-**
