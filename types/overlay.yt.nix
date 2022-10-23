@@ -1,15 +1,14 @@
 # ============================================================================ #
 #
-# Ytypes Overlay.
-# Adds FS types.
-# Only depends on `ytypes.{Prim,Core}'.
+# YTypes Overlay.
 #
 # NOTE: `ytypes' is a member of `<pkgs>.lib.ytypes'.
 #
 # ---------------------------------------------------------------------------- #
 
 final: prev: {
-  FS = import ./fs.nix { ytypes = { inherit (final) Prim Core; }; };
+  FS    = import ./fs.nix         { ytypes = final; };
+  Fetch = import ./sourceInfo.nix { ytypes = final; };
 }
 
 
