@@ -1,37 +1,125 @@
 # ============================================================================ #
 #
-#
+# TODO: Specialize based on `fetchTree { type = <TYPE>; }'.
 #
 # ---------------------------------------------------------------------------- #
 
 { ytypes }: let
 
-  inherit (ytypes.Core) restrict struct option;
+  inherit (ytypes.Core) eitherN restrict struct option;
   inherit (ytypes.Prim) string bool int;
   inherit (ytypes) Hash FS Git;
 
 # ---------------------------------------------------------------------------- #
 
-  Structs.sourceInfo = struct "sourceInfo" {
-    outPath = FS.store_path;
-    narHash = Hash.Strings.sha256_sri;
-    # Git/Github/Path
-    lastModified     = int;
-    lastModifiedDate = ytypes.Strings.timestamp;
-    # Git/Github
-    rev      = option Git.rev;
-    shortRev = option string;
-    # Git
-    revCount   = option int;
-    submodules = option bool;
+
+
+# ---------------------------------------------------------------------------- #
+
+  Structs = let
+    # `sourceInfo' fields by type as produced by `builtins.fetchTree' and
+    # other builtin fetchers.
+    siFields = {
+      outPath = FS.store_path;
+      narHash = Hash.Strings.sha256_sri;
+      # Git/Github/Path/Mercurial/Sourcehut
+      lastModified     = int;
+      lastModifiedDate = ytypes.Strings.timestamp;
+      # Git/Github/Mercurial/Sourcehut
+      rev      = Git.rev;
+      shortRev = string;
+      # Git/Mercurial
+      revCount   = int;
+      # Git
+      submodules = bool;
+    };
+  in {
+
+    # The most detailed record.
+    sourceInfo_git = struct "sourceInfo:git" siFields;
+
+    sourceInfo_github = struct "sourceInfo:github" {
+      inherit (siFields)
+        outPath narHash lastModified lastModifiedDate rev shortRev
+      ;
+    };
+
+    sourceInfo_sourcehut = struct "sourceInfo:sourcehut" {
+      inherit (siFields)
+        outPath narHash lastModified lastModifiedDate rev shortRev
+      ;
+    };
+
+    # You need to install `nix profile install nixpkgs#mercurial' first.
+    # builtins.fetchTree { url = "https://www.mercurial-scm.org/repo/hello"; type = "hg"; }
+    sourceInfo_mercurial = struct "sourceInfo:mercurial" {
+      inherit (siFields)
+        outPath narHash rev revCount shortRev
+      ;
+    };
+
+    sourceInfo_path = struct "sourceInfo:path" {
+      inherit (siFields) outPath narHash lastModified lastModifiedDate;
+    };
+
+    sourceInfo_file = struct "sourceInfo:file" {
+      inherit (siFields) outPath narHash;
+    };
+
+    # Same as `file'.
+    sourceInfo_tarball = struct "sourceInfo:tarball" {
+      inherit (siFields) outPath narHash;
+    };
+
+  };  # End Structs
+
+
+# ---------------------------------------------------------------------------- #
+
+  Eithers = {
+
+    sourceInfo = ( eitherN [
+      Structs.sourceInfo_git
+      Structs.sourceInfo_github
+      Structs.sourceInfo_sourcehut
+      Structs.sourceInfo_mercurial
+      Structs.sourceInfo_path
+      Structs.sourceInfo_file
+      Structs.sourceInfo_tarball
+    ] ) // {
+      name    = "sourceInfo";
+      toError = v: result: let
+        pv = ytypes.__internal.prettyPrint v;
+        common = "Expected a sourceInfo struct " +
+                 "(git|github|sourcehut|mercurial|path|file|tarball), ";
+        wrongType = "but value '${pv}' is of type '${builtins.typeOf v}'.";
+        notSI = "but value '${pv}' does not align with any sourceInfo schema.";
+        why = if ! ( builtins.isAttrs v ) then wrongType else notSI;
+      in common + why;
+    };
+
+    sourceInfo_indirect = Eithers.sourceInfo;
+
   };
 
 
 # ---------------------------------------------------------------------------- #
 
 in {
-  inherit Structs;
-  inherit (Structs) sourceInfo;
+  inherit Structs Eithers;
+  inherit (Structs)
+    sourceInfo_git
+    sourceInfo_github
+    sourceInfo_sourcehut
+    sourceInfo_mercurial
+    sourceInfo_path
+    sourceInfo_file
+    sourceInfo_tarball
+  ;
+  inherit (Eithers)
+    sourceInfo
+    sourceInfo_indirect
+  ;
 }
 
 
