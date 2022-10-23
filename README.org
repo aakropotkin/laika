@@ -106,7 +106,7 @@ arguments for =builtins.fetchGit=, and injection of a custom hook.
     fetchGitW = {
       __innerFunction = builtins.fetchGit;
       # Allows `lib.functionArgs' and `lib.callWith' to work.
-      __functionArgs = { url = false; name = true; /* ... */ };
+      __functionArgs = { url = false; allRefs = true; /* ... */ };
       # Stashes "auto-args".
       __thunk = { submodules = false; shallow = false; allRefs = false; };
       # Convert strings to attrs, and add our auto-args.
@@ -116,7 +116,7 @@ arguments for =builtins.fetchGit=, and injection of a custom hook.
         # This is implemented the same way as
         # `nixpkgs#lib.callPackageWith' except we omit the `override' and
         # `overrideDerivation' additions.
-      in lib.canPassStrict self.__innerFunction ( self.__thunk // args );
+      in lib.canPassStrict self ( self.__thunk // args );
       # The function entry point ends up being minimal.
       __functor = self: x:
         self.__innerFunction ( self.__processArgs x );
