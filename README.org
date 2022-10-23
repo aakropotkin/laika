@@ -119,7 +119,7 @@ arguments for =builtins.fetchGit=, and injection of a custom hook.
       in lib.canPassStrict self.__innerFunction ( self.__thunk // args );
       # The function entry point ends up being minimal.
       __functor = self: x:
-          self.__innerFunction ( self.__processArgs x );
+        self.__innerFunction ( self.__processArgs x );
     };
     # Customize the fetcher with new auto-args and add logging.
     myGitFetcher = fetchGitW // {
