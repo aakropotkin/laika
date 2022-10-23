@@ -24,6 +24,7 @@
       signature = let
         # FIXME: I think `rev' might be parsed from `url' by `fetchTree'?
         # You need to test this.
+        # REGARDLESS you need to toggle `optional' for each combo in `eitherN`.
         arg1 = struct {
           type       = yt.enum ["git"];
           url        = yt.Uri.Strings.uri_ref;
@@ -32,6 +33,7 @@
           allRefs    = option bool;  # nixpkgs: sparseCheckout
           submodules = option bool;  # nixpkgs: fetchSubmodules
           shallow    = option bool;  # nixpkgs: deepClone?
+          narHash    = option yt.Hash.sha256_sri;
         };
       in [arg1 yt.SourceInfo.git];
 
@@ -51,14 +53,16 @@
       shallow    = true;    # Defaults to false
       submodules = true;    # Defaults to false
       ref        = true;    # Defaults to "refs/heads/HEAD"
-      rev        = ! pure;  # Defaults to tip of `ref'
+      # FIXME: One of these is required in pure mode, but URL might cover?
+      narHash    = true;
+      rev        = true;    # Defaults to tip of `ref'
     };
 
     __innerFunction = builtins.fetchTree;
 
     # Stashed "auto-args" that can be set by users.
     # These align with the defaults.
-    # `ref' and `name' are intentionally omitted despite having defaults.
+    # `ref' is intentionally omitted despite having a default.
     __thunk = {
       submodules = false;
       shallow    = false;
