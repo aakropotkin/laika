@@ -1,6 +1,6 @@
 # ============================================================================ #
 #
-# fetchTreeGitW
+# fetchTreeGithubW
 #
 # ---------------------------------------------------------------------------- #
 
@@ -17,23 +17,34 @@
   fetchTreeGitW = {
 
     __functionMeta = {
-      name      = "fetchTreeGitW";
+      name      = "fetchTreeGithubW";
       from      = "builtins";
       innerName = "fetchTree";
 
       signature = let
+        arg1_fields = {
+          type = yt.enum ["github"];
+          url  = yt.Uri.Strings.uri_ref;
+          inherit (yt.Git) owner repo rev ref;
+        };
         # FIXME: I think `rev' might be parsed from `url' by `fetchTree'?
         # You need to test this.
-        arg1 = struct {
-          type       = yt.enum ["git"];
-          url        = yt.Uri.Strings.uri_ref;
-          rev        = if pure then yt.Git.rev else option yt.Git.rev;
-          ref        = option yt.Git.ref;
-          allRefs    = option bool;  # nixpkgs: sparseCheckout
-          submodules = option bool;  # nixpkgs: fetchSubmodules
-          shallow    = option bool;  # nixpkgs: deepClone?
+        arg1_url = struct {
+          inherit (arg1_fields) type url;
+          # FIXME: test
+          rev   = yt.option yt.Git.rev;
+          ref   = yt.option yt.Git.ref;
+          owner = yt.option yt.Git.owner;
+          repo  = yt.option yt.Git.repo;
         };
-      in [arg1 yt.SourceInfo.git];
+        arg1_attrs = struct {
+          inherit (arg1_fields) type owner repo;
+          rev = if pure then yt.Git.rev else option yt.Git.rev;
+          ref = yt.option yt.Git.ref;
+          url = yt.option arg1_fields.url;
+        };
+        arg1 = yt.either arg1_url arg1_attrs;
+      in [arg1 yt.SourceInfo.github];
 
       properties = {
         inherit pure typecheck;
@@ -46,11 +57,11 @@
     # pass `type = "git"'.
     __functionArgs = {
       type       = false;   # Must be "git"
-      url        = false;
-      allRefs    = true;    # Defaults to false
-      shallow    = true;    # Defaults to false
-      submodules = true;    # Defaults to false
+      url        = true;
+      owner      = true;
+      repo       = true;
       ref        = true;    # Defaults to "refs/heads/HEAD"
+      # FIXME: maybe dependant on URL
       rev        = ! pure;  # Defaults to tip of `ref'
     };
 
@@ -59,11 +70,7 @@
     # Stashed "auto-args" that can be set by users.
     # These align with the defaults.
     # `ref' and `name' are intentionally omitted despite having defaults.
-    __thunk = {
-      submodules = false;
-      shallow    = false;
-      allRefs    = false;
-    };
+    __thunk = {};
 
     # NOTE: Don't try to parse `rev' here, do that elsewhere.
     # Keep this routine "strict" in alignment with Nix.
