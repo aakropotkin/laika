@@ -12,7 +12,6 @@
   yt = lib.ytypes // lib.ytypes.Prim // lib.ytypes.Core;
   inherit (yt) option struct bool;
 
-
 # ---------------------------------------------------------------------------- #
 
   fetchGitW = {

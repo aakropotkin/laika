@@ -12,7 +12,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-  lodash_git = {
+  lodash_git_sourceInfo = {
     lastModified     = 1666556950;
     lastModifiedDate = "20221023202910";
     narHash    = "sha256-H3BjwgbA0LPrCwDMYtZu7q1r9rWBQcAon1y1glKgtrk=";
@@ -29,7 +29,7 @@
 
     testSourceInfo_0 = {
       # Lodash Git SourceInfo
-      expr = SourceInfo.sourceInfo.check lodash_git;
+      expr = SourceInfo.sourceInfo.check lodash_git_sourceInfo;
       expected = true;
     };
 
@@ -38,7 +38,7 @@
 
     testSourceInfo_git_0 = {
       # Lodash Git SourceInfo
-      expr = SourceInfo.git.check lodash_git;
+      expr = SourceInfo.git.check lodash_git_sourceInfo;
       expected = true;
     };
 
@@ -47,7 +47,7 @@
 
     testSourceInfo_github_0 = {
       # Lodash Git SourceInfo
-      expr = SourceInfo.github.check lodash_git;
+      expr = SourceInfo.github.check lodash_git_sourceInfo;
       expected = false;
     };
 
