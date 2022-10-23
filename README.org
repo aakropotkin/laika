@@ -105,7 +105,7 @@ arguments for =builtins.fetchGit=, and injection of a custom hook.
     pp = lib.generators.toPretty {};
     fetchGitW = {
       __innerFunction = builtins.fetchGit;
-      # Allows `lib.functionArgs' and `lib.callWith' to work.
+      # Allows `lib.functionArgs' and `lib.canPassStrict' to work.
       __functionArgs = { url = false; allRefs = true; /* ... */ };
       # Stashes "auto-args".
       __thunk = { submodules = false; shallow = false; allRefs = false; };
