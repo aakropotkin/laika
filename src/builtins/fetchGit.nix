@@ -34,10 +34,9 @@
           shallow    = option bool;  # nixpkgs: deepClone?
         };
         arg1_string_impure = yt.Uri.Strings.uri_ref;
-        arg1_impure = yt.either arg1_attrs arg1_string;
-        arg1 = if pure then arg1_attrs else arg1_impure;
-        rsl = yt.Fetch.sourceInfo_git;
-      in [arg1 rsl];
+        arg1_impure        = yt.either arg1_attrs arg1_string;
+        arg1               = if pure then arg1_attrs else arg1_impure;
+      in [arg1 yt.Fetch.Structs.sourceInfo_git];
 
       properties = {
         inherit pure typecheck;
@@ -48,10 +47,10 @@
 
     __functionArgs = {
       url        = false;
-      name       = true;   # Defaults to "source". XXX: docs are wrong.
-      allRefs    = true;   # Defaults to false
-      shallow    = true;   # Defaults to false
-      submodules = true;   # Defaults to false
+      name       = true;    # Defaults to "source". XXX: docs are wrong.
+      allRefs    = true;    # Defaults to false
+      shallow    = true;    # Defaults to false
+      submodules = true;    # Defaults to false
       ref        = true;    # Defaults to `refs/heads/HEAD'
       rev        = ! pure;  # Defaults to tip of `ref'
     };
