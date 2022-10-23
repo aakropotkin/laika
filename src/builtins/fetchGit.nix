@@ -34,7 +34,7 @@
           shallow    = option bool;  # nixpkgs: deepClone?
         };
         arg1_string_impure = yt.Uri.Strings.uri_ref;
-        arg1_impure        = yt.either arg1_attrs arg1_string;
+        arg1_impure        = yt.either arg1_attrs arg1_string_impure;
         arg1               = if pure then arg1_attrs else arg1_impure;
       in [arg1 yt.Fetch.Structs.sourceInfo_git];
 
