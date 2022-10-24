@@ -13,13 +13,13 @@
 # ---------------------------------------------------------------------------- #
 
   lodash_git_sourceInfo = {
-    lastModified     = 1666556950;
-    lastModifiedDate = "20221023202910";
-    narHash    = "sha256-H3BjwgbA0LPrCwDMYtZu7q1r9rWBQcAon1y1glKgtrk=";
-    outPath    = "/nix/store/dx5fy4dwy2s475jabrxg2n2imqn2xni3-source";
-    rev        = "51e1d2da76b5b5718022f104c2a0782323b8c792";
-    revCount   = 110;
-    shortRev   = "51e1d2d";
+    lastModified = 1619198737;
+    lastModifiedDate = "20210423172537";
+    narHash = "sha256-9qUKLWumnPxZU0rDNtKjZUdSKGDQIqtEVLv4cfwPPnw=";
+    outPath = "/nix/store/ah3r84xzpq6mvr0sz3yzbflydwmzfvn8-source";
+    rev = "2da024c3b4f9947a48517639de7560457cd4ec6c";
+    revCount = 8005;
+    shortRev = "2da024c";
     submodules = false;
   };
 
@@ -31,8 +31,7 @@
       # Lodash Git SourceInfo
       expr = lib.libfetch.fetchGitW {
         url = "https://github.com/lodash/lodash.git";
-        rev = "51e1d2da76b5b5718022f104c2a0782323b8c792";
-        ref = "refs/heads/master";
+        rev = "2da024c3b4f9947a48517639de7560457cd4ec6c";
       };
       expected = lodash_git_sourceInfo;
     };

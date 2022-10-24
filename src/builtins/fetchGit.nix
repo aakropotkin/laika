@@ -61,8 +61,8 @@
     # `ref' and `name' are intentionally omitted despite having defaults.
     __thunk = {
       submodules = false;
-      #shallow    = false;
-      #allRefs    = false;
+      shallow    = false;
+      allRefs    = false;
     };
 
     # NOTE: Don't try to parse `rev' here, do that elsewhere.
