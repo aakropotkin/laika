@@ -36,18 +36,18 @@ Wrappers carry a =__functionMeta.signature= field which contains a list of
 YANTS types ( provided by the =ak-nix= fork: =ytypes= ) representing the
 function "prototype".
 
-For example for the function =inc= our signature will be =int -> int=,
+For example for the function =inc= our signature will be =[int int]=,
 meaning "a function which accepts an integer and returns an integer".
 
-Another example =sum= would be =int -> int -> int=, being a function which
-accepts two integers and returns an integer.
+Another example: =sum= would have the signature =[int int int]=, indicating
+a function which accepts two integers and returns an integer.
 
-This function signature is a useful tool not only for type checking, but
+This function signature is a useful tool, not only for type checking, but
 also for documentation and "auto-calling" functions with correct
 combinations of arguments.
 
 Many of Nix's builtins are polymorphic, for example =builtins.fetchGit=
-which accepts either a string, or an attrset, and these signatures help us
+which accepts either a string or an attrset, and these signatures help us
 keep track of our available argument combinations.
 
 *** Enabling/Disabling
@@ -70,8 +70,10 @@ Many builtin functions are effected by runtime environment settings, for
 example =pure= mode, and our wrappers
 
 These settings are always controlled by a boolean argument at the top of
-each fetcher's definition in [[./src]], and if a function is effected by
+each fetcher's definition. 
+To make this polymorphism more opaque, any time a function is effected by
 context this will be recorded in =__functionMeta.properties.*= tags.
+For example an instance of a fetcher for impure mode will set `pure =false`.
 
 * Wrapper Conventions
 ** Helper Functions as Fields
