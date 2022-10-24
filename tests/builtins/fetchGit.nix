@@ -30,10 +30,9 @@
     testFetchGit_0 = {
       # Lodash Git SourceInfo
       expr = lib.libfetch.fetchGitW {
-        #url     = "https://github.com/lodash/lodash.git";
-        url     = "https://github.com/lodash/lodash";
-        rev     = "51e1d2da76b5b5718022f104c2a0782323b8c792";
-        allRefs = true;
+        url = "https://github.com/lodash/lodash.git";
+        rev = "51e1d2da76b5b5718022f104c2a0782323b8c792";
+        ref = "refs/heads/master";
       };
       expected = lodash_git_sourceInfo;
     };
