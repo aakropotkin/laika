@@ -79,6 +79,7 @@ jobs:
           nix build head#tests --show-trace --impure;
 
       - name: All Tests Nixpkg Git
+        if: always()
         run: |
           nix profile install nixpkgs#git;
           { printf '    git    version: '; git    --version; } >&2;
