@@ -65,12 +65,24 @@ jobs:
           echo "# ============================================================================ #" >&2;
           { printf '    bash   version: '; bash   --version|head -n1; } >&2;
           { printf '    nix    version: '; nix    --version; } >&2;
+          { printf '    git    version: '; git    --version; } >&2;
           echo "# ---------------------------------------------------------------------------- #" >&2;
           # Register aliases to avoid the long ref
           nix registry add head "github:${{ github.repository }}/$GITHUB_REF";
 
       - name: All Tests
         run: |
+          { printf '    git    version: '; git    --version; } >&2;
+          echo "# ---------------------------------------------------------------------------- #" >&2;
+          nix build head#tests --show-trace;
+          echo "# ---------------------------------------------------------------------------- #" >&2;
+          nix build head#tests --show-trace --impure;
+
+      - name: All Tests Nixpkg Git
+        run: |
+          nix profile install nixpkgs#git;
+          { printf '    git    version: '; git    --version; } >&2;
+          echo "# ---------------------------------------------------------------------------- #" >&2;
           nix build head#tests --show-trace;
           echo "# ---------------------------------------------------------------------------- #" >&2;
           nix build head#tests --show-trace --impure;
