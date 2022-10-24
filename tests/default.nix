@@ -7,12 +7,11 @@
 #
 # ---------------------------------------------------------------------------- #
 
-{ lib       ? laika
-, pkgsFor   ? ( laika.legacyPackages or nixpkgs.legacyPackages ).${system}
-, writeText ? pkgsFor.writeText
+{ laika     ? builtins.getFlake ( toString ../. )
+, lib       ? laika.lib
 , system    ? builtins.currentSystem
-, laika     ? builtins.getFlake ( toString ../. )
-, nixpkgs   ? builtins.getFlake "nixpkgs"
+, pkgsFor   ? laika.inputs.nixpkgs.legacyPackages.${system}
+, writeText ? pkgsFor.writeText
 
 # Options
 , keepFailed ? false  # Useful if you run the test explicitly.
@@ -35,6 +34,7 @@
   in builtins.foldl' ( ts: file: ts // ( testsFrom file ) ) {} [
     ./types
     ./builtins
+    ./fetchurlDrv.nix
   ];
 
 # ---------------------------------------------------------------------------- #
