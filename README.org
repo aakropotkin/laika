@@ -73,7 +73,8 @@ These settings are always controlled by a boolean argument at the top of
 each fetcher's definition. 
 To make this polymorphism more opaque, any time a function is effected by
 context this will be recorded in =__functionMeta.properties.*= tags.
-For example an instance of a fetcher for impure mode will set `pure =false`.
+For example an instance of a fetcher for impure mode will
+set ~pure = false~.
 
 * Wrapper Conventions
 ** Helper Functions as Fields
