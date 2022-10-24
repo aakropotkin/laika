@@ -22,7 +22,9 @@
       innerName = "fetchGit";
 
       signature = let
-        hash = yt.eitherN [yt.Hash.md5 yt.Hash.sha256 yt.Hash.sha512];
+        hash = yt.eitherN [
+          yt.Hash.md5 yt.Hash.sha1 yt.Hash.sha256 yt.Hash.sha512
+        ];
         arg1_rough = struct {
           url            = yt.Uri.Strings.uri_ref;
           name           = option yt.FS.filename;  # FIXME: storepath filename
