@@ -30,9 +30,10 @@
     testFetchTreeGit_0 = {
       # Lodash Git SourceInfo
       expr = lib.libfetch.fetchTreeGitW {
-        type = "git";
-        url  = "https://github.com/lodash/lodash.git";
-        rev  = "51e1d2da76b5b5718022f104c2a0782323b8c792";
+        type    = "git";
+        url     = "https://github.com/lodash/lodash.git";
+        rev     = "51e1d2da76b5b5718022f104c2a0782323b8c792";
+        allRefs = true;
       };
       expected = lodash_git_sourceInfo;
     };
