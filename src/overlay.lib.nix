@@ -16,6 +16,10 @@ in {
     fetchTreeGithubW = callBuiltin ./builtins/fetchTreeGithub.nix {};
     fetchGitW        = callBuiltin ./builtins/fetchGit.nix {};
     pathW            = callBuiltin ./builtins/path.nix {};
+    fetchurlDrv      = import ./fetchurlDrv/fetchurlDrvUnwrapped.nix;
+    fetchurlDrvW = callBuiltin ./fetchurlDrv/fetchurlDrv.nix {
+      inherit (final.libfetch) fetchurlDrv;
+    };
   };
 }
 
