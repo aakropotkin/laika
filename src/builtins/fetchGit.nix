@@ -76,7 +76,7 @@
     __functor = self: x: let
       checked = yt.defun self.__functionMeta.signature self.__innerFunction;
       fn      = if typecheck then checked else self.__innerFunction;
-    in fn ( self.__processArgs x );
+    in fn ( self.__processArgs self x );
   };
 
 

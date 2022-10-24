@@ -34,6 +34,8 @@
        ts.tests or ts;
   in builtins.foldl' ( ts: file: ts // ( testsFrom file ) ) {} [
     ./tests.nix
+    ./fetchTree.nix
+    ./fetchGit.nix
   ];
 
 # ---------------------------------------------------------------------------- #

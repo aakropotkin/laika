@@ -71,7 +71,7 @@
 
     # NOTE: Don't try to parse `rev' here, do that elsewhere.
     # Keep this routine "strict" in alignment with Nix.
-    __processArgs = self: x: self.__thunk // args;
+    __processArgs = self: x: self.__thunk // x;
 
     # Typechecking is performed after `__processArgs'.
     # This allows us to add `type = "git"' as a `__thunk' in a less strict
@@ -79,7 +79,7 @@
     __functor = self: x: let
       checked = yt.defun self.__functionMeta.signature self.__innerFunction;
       fn      = if typecheck then checked else self.__innerFunction;
-    in fn ( self.__processArgs x );
+    in fn ( self.__processArgs self x );
   };
 
 

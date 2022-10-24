@@ -14,7 +14,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-  fetchTreeGitW = {
+  fetchTreeGithubW = {
 
     __functionMeta = {
       name      = "fetchTreeGithubW";
@@ -28,12 +28,12 @@
           inherit (yt.Git) owner repo rev ref;
           narHash = option yt.Hash.sha256_sri;
         };
-        # FIXME: I think `rev' might be parsed from `url' by `fetchTree'?
-        # You need to test this.
-        # REGARDLESS you need to toggle `optional' for each combo in `eitherN`.
+        # In pure mode either `narHash' or `rev' must be specified.
+        # In practice `narHash' is worthless because it'll be blown out as soon
+        # as a new ref is pushed; but there's technically use cases.
+        # FIXME: fix the restriction or use eithers.
         arg1_url = struct {
           inherit (arg1_fields) type url narHash;
-          # FIXME: test
           rev   = yt.option yt.Git.rev;
           ref   = yt.option yt.Git.ref;
           owner = yt.option yt.Git.owner;
@@ -63,7 +63,7 @@
       owner      = true;
       repo       = true;
       ref        = true;    # Defaults to "refs/heads/HEAD"
-      # FIXME: One of these is required in pure mode, but URL might cover?
+      # XXX: One of these is required in pure mode.
       narHash    = true;
       rev        = true;    # Defaults to tip of `ref'
     };
@@ -76,7 +76,7 @@
 
     # NOTE: Don't try to parse `rev' here, do that elsewhere.
     # Keep this routine "strict" in alignment with Nix.
-    __processArgs = self: x: self.__thunk // args;
+    __processArgs = self: x: self.__thunk // x;
 
     # Typechecking is performed after `__processArgs'.
     # This allows us to add `type = "git"' as a `__thunk' in a less strict
@@ -84,7 +84,7 @@
     __functor = self: x: let
       checked = yt.defun self.__functionMeta.signature self.__innerFunction;
       fn      = if typecheck then checked else self.__innerFunction;
-    in fn ( self.__processArgs x );
+    in fn ( self.__processArgs self x );
   };
 
 

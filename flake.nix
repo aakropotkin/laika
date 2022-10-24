@@ -10,9 +10,12 @@
                                                        ytOverlays.laika;
 
     libOverlays.deps  = rime.libOverlays.default;
-    libOverlays.laika = final: prev: {
+    libOverlays.ytypes = final: prev: {
       ytypes = prev.ytypes.extend ytOverlays.laika;
     };
+    libOverlays.libfetch = import ./src/overlay.lib.nix;
+    libOverlays.laika    = nixpkgs.lib.composeExtensions libOverlays.ytypes
+                                                         libOverlays.libfetch;
     libOverlays.default = nixpkgs.lib.composeExtensions libOverlays.deps
                                                         libOverlays.laika;
 

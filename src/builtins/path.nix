@@ -2,9 +2,14 @@
 #
 # pathW
 #
+# FIXME: typecheck and "pure" mode.
+#
 # ---------------------------------------------------------------------------- #
 
-{ lib }: let
+{ lib
+, pure     ? lib.inPureEvalMode
+, typcheck ? false
+}: let
 
   yt = lib.ytypes // lib.ytypes.Prim // lib.ytypes.Core;
   inherit (yt) option struct either function bool string;
@@ -35,13 +40,14 @@ in {
     path      = false;
     filter    = true;
     recursive = true;
-    #sha256    = ! lib.inPureEvalMode;  # FIXME: find smarter option.
-    sha256    = true;
+    #sha256    = ! pure;
+    sha256    = true;  # FIXME: this seems to work if you're under a git tree.
   };
 
   __innerFunction = builtins.path;
 
-  __functor = self: lib.apply self.__innerFunction;
+  __functor = self:
+    lib.apply self.__innerFunction;
 
 }
 

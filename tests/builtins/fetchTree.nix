@@ -29,13 +29,30 @@
 
     testFetchTreeGit_0 = {
       # Lodash Git SourceInfo
-      expr = lib.laika.fetchTreeGitW {
+      expr = lib.libfetch.fetchTreeGitW {
         type = "git";
         url  = "https://github.com/lodash/lodash.git";
         rev  = "51e1d2da76b5b5718022f104c2a0782323b8c792";
       };
       expected = lodash_git_sourceInfo;
     };
+
+
+# ---------------------------------------------------------------------------- #
+
+    # FIXME: fetch a bogus repo where `narHash' will always work.
+    # If `rev' ever changes it'll break, but what we care about is showing that
+    # /technically/ you can just provide `narHash' if you wanted to.
+
+    #testFetchTreeGit_1 = {
+    #  # Lodash Git SourceInfo
+    #  expr = lib.libfetch.fetchTreeGitW {
+    #    type = "git";
+    #    url  = "https://github.com/lodash/lodash.git";
+    #    inherit (lodash_git_sourceInfo) narHash;
+    #  };
+    #  expected = lodash_git_sourceInfo;
+    #};
 
 
 # ---------------------------------------------------------------------------- #
