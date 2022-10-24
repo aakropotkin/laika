@@ -1,6 +1,6 @@
 # ============================================================================ #
 #
-# General tests for `fetchurlDrv' and related wrappers.
+# General tests for `fetchGit' and wrappers.
 #
 # ---------------------------------------------------------------------------- #
 
@@ -8,17 +8,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-  inherit (lib.libfetch)
-    fetchurlDrv
-    fetchurlDrvW
-  ;
-
-  lodashFetchInfo = {
-    url    = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
-    sha512 = "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krg" +
-             "XZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
-  };
-
+  inherit (lib.libfetch) pathW;
 
 # ---------------------------------------------------------------------------- #
 
@@ -26,10 +16,9 @@
 
 # ---------------------------------------------------------------------------- #
 
-    testFetchurlDrvUnwrapped_0 = {
-      expr = let
-        tarball = fetchurlDrv lodashFetchInfo;
-      in builtins.deepSeq tarball ( lib.isDerivation tarball );
+    testPathW_0 = {
+      # Lodash Git SourceInfo
+      expr     = builtins.isString ( pathW { path = toString ./.; } );
       expected = true;
     };
 

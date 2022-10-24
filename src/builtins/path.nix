@@ -46,8 +46,7 @@ in {
 
   __innerFunction = builtins.path;
 
-  __functor = self:
-    lib.apply self.__innerFunction;
+  __functor = self: self.__innerFunction;
 
 }
 

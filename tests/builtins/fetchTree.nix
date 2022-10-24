@@ -1,6 +1,6 @@
 # ============================================================================ #
 #
-# General tests for YANTS types.
+# General tests for `fetchTree' and wrappers.
 #
 # ---------------------------------------------------------------------------- #
 
@@ -9,6 +9,10 @@
 # ---------------------------------------------------------------------------- #
 
   inherit (lib.ytypes) SourceInfo;
+  inherit (lib.libfetch)
+    fetchTreeGitW
+    fetchTreeGithubW
+  ;
 
 # ---------------------------------------------------------------------------- #
 
@@ -23,13 +27,17 @@
     submodules = false;
   };
 
+  lodash_github_sourceInfo = removeAttrs lodash_git_sourceInfo [
+    "submodules" "revCount"
+  ];
+
   tests = {
 
 # ---------------------------------------------------------------------------- #
 
     testFetchTreeGit_0 = {
       # Lodash Git SourceInfo
-      expr = lib.libfetch.fetchTreeGitW {
+      expr = fetchTreeGitW {
         type = "git";
         url  = "https://github.com/lodash/lodash.git";
         rev  = "2da024c3b4f9947a48517639de7560457cd4ec6c";
@@ -53,6 +61,20 @@
     #  };
     #  expected = lodash_git_sourceInfo;
     #};
+
+
+# ---------------------------------------------------------------------------- #
+
+    testFetchTreeGithub_0 = {
+      # Lodash Git SourceInfo
+      expr = fetchTreeGithubW {
+        type  = "github";
+        owner = "lodash";
+        repo  = "lodash";
+        rev   = "2da024c3b4f9947a48517639de7560457cd4ec6c";
+      };
+      expected = lodash_github_sourceInfo;
+    };
 
 
 # ---------------------------------------------------------------------------- #
