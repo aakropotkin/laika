@@ -51,6 +51,16 @@ jobs:
             
       - name: Setup
         run: |
+          mkdir -p /home/runner/.ssh;
+          ssh-keyscan github.com >> /home/runner/.ssh/known_hosts;
+          echo "${{ secrets.FLOCO_SSH_KEY }}" > /home/runner/.ssh/id_rsa;
+          echo "${{ secrets.FLOCO_SSH_PUBKEY }}" > /home/runner/.ssh/id_rsa.pub;
+          chmod 600 /home/runner/.ssh/id_rsa;
+          ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null;
+          ssh-add /home/runner/.ssh/id_rsa;
+          git config --global user.email "alex.ameen.tx@gmail.com";
+          git config --global user.name "Floco GHA";
+
           echo "# ============================================================================ #" >&2;
           { printf '    bash   version: '; bash   --version|head -n1; } >&2;
           { printf '    nix    version: '; nix    --version; } >&2;
