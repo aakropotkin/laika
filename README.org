@@ -8,9 +8,12 @@ functionality, but seemingly minor differences between these can drastically
 effect performance at scale. 
 
 For example the use case that led to the creation of this utility was
-creating an abstract frontend that was compliant with Nixpkgs while allowing
+wanting an abstract frontend that was compliant with Nixpkgs while allowing
 common fetch instances to be swapped for more efficient builtins when creating
 non-Nixpkgs derivations.
+In practice this means you have common fetcher that supports legacy Nix
+using Nixpkgs fetchers, while swapping in faster builtin alternatives in later
+releases of Nix.
 
 Additionally these abstractions allowed me to dynamically /prefetch/ SHA512
 integrities to yield CA derivations that use SHA256 using IFD.
@@ -25,6 +28,9 @@ different hash algo to fetch.
 Finally, from UX perspective, having these abstractions saves new users from
 needing to know the nitty gritty implementation details of each fetcher, and
 just call a generic wrapper that consumers can optimize for their use case.
+If you prefer derivations vs builtins for different cache performance you
+can simply toggle a config option without needing to use `scopedImport` or
+complex overlays. 
 
 * Wrapper Features
 ** Function Argument Reading
