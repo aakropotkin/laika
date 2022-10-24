@@ -2,6 +2,27 @@
 
 Nix fetcher abstractions.
 
+* Why?
+Nix and Nixpkgs offer a wide variety of fetchers with a lot of overlapping
+functionality, but seemingly minor differences between these can drastically
+effect performance at scale. 
+
+For example the use case that led to the creation of this utility was
+creating an abstract frontend that was compliant with Nixpkgs while allowing
+common fetch instances to be swapped for more efficient builtins when creating
+non-Nixpkgs derivations.
+
+Additionally these abstractions allowed me to dynamically /prefetch/ SHA512
+integrities to yield CA derivations that use SHA256 using IFD.
+This may seem minor, but you might be surprised to learn that different
+sha algos will yield duplicated store paths.
+Now I can avoid duplicate chains of non-CA derivations even if I use a
+different hash algo to fetch. 
+
+Finally, from UX perspective, having these abstractions saves new users from
+needing to know the nitty gritty implementation details of each fetcher, and
+just call a generic wrapper that consumers can optimize for their use case.
+
 * Wrapper Features
 ** Function Argument Reading
 Laika provides wrapped forms of Nix's builtin fetchers which allow routines
