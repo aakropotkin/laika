@@ -16,8 +16,11 @@ Additionally these abstractions allowed me to dynamically /prefetch/ SHA512
 integrities to yield CA derivations that use SHA256 using IFD.
 This may seem minor, but you might be surprised to learn that different
 sha algos will yield duplicated store paths.
+For the sources themselves this isn't a big deal, but any input addressed
+derivations that depend on those sources will set off rebuilds if you try to
+fetch later with a flake input or optimized builtin ( backed by SHA256 ).
 Now I can avoid duplicate chains of non-CA derivations even if I use a
-different hash algo to fetch. 
+different hash algo to fetch.
 
 Finally, from UX perspective, having these abstractions saves new users from
 needing to know the nitty gritty implementation details of each fetcher, and
