@@ -17,9 +17,9 @@
   fetchurlDrvW = {
 
     __functionMeta = {
-      name      = "fetchGitW";
-      from      = "builtins";
-      innerName = "fetchGit";
+      name      = "fetchurlDrvW";
+      from      = "laika#lib.libfetch";
+      innerName = "fetchurlDrv";
 
       signature = let
         hash = yt.eitherN [
@@ -80,8 +80,6 @@
       executable = false;
     };
 
-    # NOTE: Don't try to parse `rev' here, do that elsewhere.
-    # Keep this routine "strict" in alignment with Nix.
     __processArgs = self: x: let
       args = if builtins.isString x then { url = x; } else x;
     in self.__thunk // args;
