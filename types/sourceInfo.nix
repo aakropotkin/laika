@@ -12,10 +12,6 @@
 
 # ---------------------------------------------------------------------------- #
 
-
-
-# ---------------------------------------------------------------------------- #
-
   Structs = let
     # `sourceInfo' fields by type as produced by `builtins.fetchTree' and
     # other builtin fetchers.
@@ -58,8 +54,11 @@
       ;
     };
 
+    # NOTE: `lastModified' and `lastModifiedDate' don't appear for store paths.
     path = struct "sourceInfo:path" {
-      inherit (siFields) outPath narHash lastModified lastModifiedDate;
+      inherit (siFields) outPath narHash;
+      lastModified     = option siFields.lastModified;
+      lastModifiedDate = option siFields.lastModifiedDate;
     };
 
     file = struct "sourceInfo:file" {

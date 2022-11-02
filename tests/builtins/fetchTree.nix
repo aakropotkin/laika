@@ -12,6 +12,7 @@
   inherit (lib.libfetch)
     fetchTreeGitW
     fetchTreeGithubW
+    fetchTreePathW
   ;
 
 # ---------------------------------------------------------------------------- #
@@ -30,6 +31,10 @@
   lodash_github_sourceInfo = removeAttrs lodash_git_sourceInfo [
     "submodules" "revCount"
   ];
+
+  lodash_path_sourceInfo = {
+    inherit (lodash_git_sourceInfo) outPath narHash;
+  };
 
   tests = {
 
@@ -74,6 +79,26 @@
         rev   = "2da024c3b4f9947a48517639de7560457cd4ec6c";
       };
       expected = lodash_github_sourceInfo;
+    };
+
+
+# ---------------------------------------------------------------------------- #
+
+    testFetchTreePath_0 = {
+      # We refetch `lodash' from the Nix store since we already know
+      # its `narHash'.
+      expr = let
+        gitTree = fetchTreeGitW {
+          type = "git";
+          url  = "https://github.com/lodash/lodash.git";
+          rev  = "2da024c3b4f9947a48517639de7560457cd4ec6c";
+        };
+      in fetchTreePathW {
+        type = "path";
+        path = gitTree.outPath;
+        inherit (gitTree) narHash;
+      };
+      expected = lodash_path_sourceInfo;
     };
 
 

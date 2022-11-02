@@ -14,6 +14,7 @@ in {
   libfetch = ( prev.libfetch or {} ) // {
     fetchTreeGitW    = callBuiltin ./builtins/fetchTreeGit.nix {};
     fetchTreeGithubW = callBuiltin ./builtins/fetchTreeGithub.nix {};
+    fetchTreePathW   = callBuiltin ./builtins/fetchTreePath.nix {};
     fetchGitW        = callBuiltin ./builtins/fetchGit.nix {};
     pathW            = callBuiltin ./builtins/path.nix {};
     fetchurlDrv      = import ./fetchurlDrv/fetchurlDrvUnwrapped.nix;
