@@ -27,6 +27,11 @@ in {
       isGithubUrl
       parseGitUrl
     ;
+    inherit (callBuiltin ./generic/git/args.nix {})
+      genericGitArgFields
+      genericGitArgsPure
+      genericGitArgsImpure
+    ;
   };
 }
 
