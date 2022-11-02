@@ -42,7 +42,7 @@
       };
     };
 
-    # Basically the same as `fetchTree' but you can't pass `name', and must
+    # Basically the same as `builtins.path' but you can't pass `name', and must
     # pass `type = "path"'.
     __functionArgs = {
       type    = false;  # Must be "path"
@@ -53,16 +53,12 @@
     __innerFunction = builtins.fetchTree;
 
     # Stashed "auto-args" that can be set by users.
-    # These align with the defaults.
-    # `ref' is intentionally omitted despite having a default.
     __thunk = {};
 
-    # NOTE: Don't try to parse `rev' here, do that elsewhere.
-    # Keep this routine "strict" in alignment with Nix.
     __processArgs = self: x: self.__thunk // x;
 
     # Typechecking is performed after `__processArgs'.
-    # This allows us to add `type = "git"' as a `__thunk' in a less strict
+    # This allows us to add `type = "path"' as a `__thunk' in a less strict
     # form of this routine.
     __functor = self: x: let
       checked = yt.defun self.__functionMeta.signature self.__innerFunction;
