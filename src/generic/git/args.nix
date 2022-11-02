@@ -8,23 +8,6 @@
 
   yt  = lib.ytypes // lib.ytypes.Prim // lib.ytypes.Core;
 
-  # FIXME: move these
-  # XXX: Duplicate of code in `at-node-nix#lib.libfetch'
-  Sums.hash = yt.sum {
-    shasum = yt.Hash.sha1;
-    inherit (yt.Hash) md5 sha1 sha256 sha512;
-    inherit (yt.Hash.String)
-      sha1_hash sha256_hash sha512_hash md5_hash
-      sha1_sri sha256_sri sha512_sri
-    ;
-    narHash   = yt.Strings.sha256_sri;   # FIXME: this uses a different charset
-    integrity = yt.eitherN [
-      yt.Strings.sha1_sri
-      yt.Strings.sha256_sri
-      yt.Strings.sha512_sri
-    ];
-  };
-
 # ---------------------------------------------------------------------------- #
 
   nixpkgsFetchgitArgs = {
@@ -63,8 +46,8 @@
     type  = yt.enum ["git" "github" "sourcehut"];
     url   = yt.FlakeRef.Strings.git_ref;
     flake = yt.bool;
-    inherit (yt.Git) rev ref;  # `branchName' is alias of `ref' for `nixpkgs'
-    inherit (Sums) hash;   # nixpkgs accepts a slew of options.
+    inherit (yt.Git) rev ref;     # `branchName' is alias of `ref' for `nixpkgs'
+    inherit (yt.Hash.Sums) hash;  # nixpkgs accepts a slew of options.
     allRefs    = yt.bool;  # nixpkgs: sparseCheckout
     submodules = yt.bool;  # nixpkgs: fetchSubmodules
     shallow    = yt.bool;  # nixpkgs: deepClone?
@@ -103,6 +86,7 @@
 in {
   inherit
     nixpkgsFetchgitArgs
+    genericGitArgFields
     genericGitArgs'
     genericGitArgsPure
     genericGitArgsImpure

@@ -21,6 +21,12 @@ in {
     fetchurlDrvW = callBuiltin ./fetchurlDrv/fetchurlDrv.nix {
       inherit (final.libfetch) fetchurlDrv;
     };
+
+    # FIXME: move these to a subattr or `rime'.
+    inherit (callBuiltin ./generic/git/parseGitUrlToArgs.nix {})
+      isGithubUrl
+      parseGitUrl
+    ;
   };
 }
 

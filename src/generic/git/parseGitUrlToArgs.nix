@@ -12,6 +12,8 @@
   isGithubUrl = url:
     lib.test "([^@]+@)?github\\.com" ( lib.liburi.parseFullUrl url ).authority;
 
+  # FIXME: doesn't handle `git+ssh://git@github.com:<USER>/<REPO>'.
+  # You have to use "git+ssh://git@github.com/<USER>/<REPO>".
   parseGitUrl = {
     __functionArgs.url = false;
     __innerFunction = { url }: let
