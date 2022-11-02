@@ -24,7 +24,6 @@
       signature = let
         arg1_fields = {
           type = yt.enum ["github"];
-          url  = yt.Uri.Strings.uri_ref;
           inherit (yt.Git) owner repo rev ref;
           narHash = option yt.Hash.sha256_sri;
         };
@@ -32,20 +31,11 @@
         # In practice `narHash' is worthless because it'll be blown out as soon
         # as a new ref is pushed; but there's technically use cases.
         # FIXME: fix the restriction or use eithers.
-        arg1_url = struct {
-          inherit (arg1_fields) type url narHash;
-          rev   = yt.option yt.Git.rev;
-          ref   = yt.option yt.Git.ref;
-          owner = yt.option yt.Git.owner;
-          repo  = yt.option yt.Git.repo;
-        };
-        arg1_attrs = struct {
+        arg1 = struct {
           inherit (arg1_fields) type owner repo narHash;
           rev = if pure then yt.Git.rev else option yt.Git.rev;
           ref = yt.option yt.Git.ref;
-          url = yt.option arg1_fields.url;
         };
-        arg1 = yt.either arg1_url arg1_attrs;
       in [arg1 yt.SourceInfo.github];
 
       properties = {
@@ -55,11 +45,8 @@
       };
     };
 
-    # Basically the same as `fetchTree' but you can't pass `name', and must
-    # pass `type = "git"'.
     __functionArgs = {
       type       = false;   # Must be "git"
-      url        = true;
       owner      = true;
       repo       = true;
       ref        = true;    # Defaults to "refs/heads/HEAD"
