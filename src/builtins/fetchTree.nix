@@ -51,7 +51,7 @@
         if type == "tarball" then lib.libfetch.fetchTreeTarballW else
         if type == "file"    then lib.libfetch.fetchTreeFileW    else
         throw "TODO: implement remaining wrappers";
-      tm = builtins.intersectAttrs self.__thunk ti.__functionArgs;
+      tm = builtins.intersectAttrs ti.__functionArgs self.__thunk;
     in tm // x;
 
     # TODO: mercurial, sourcehut, indirect
