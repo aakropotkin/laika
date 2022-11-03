@@ -18,8 +18,8 @@
 
     __functionMeta = {
       name      = "fetchTreeGitW";
-      from      = "builtins";
-      innerName = "fetchTree";
+      from      = "laika#lib.libfetch";
+      innerName = "builtins.fetchTree";
 
       signature = let
         # FIXME: I think `rev' might be parsed from `url' by `fetchTree'?

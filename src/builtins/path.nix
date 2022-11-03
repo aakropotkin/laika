@@ -20,8 +20,8 @@ in {
 
   __functionMeta = {
     name      = "pathW";
-    innerName = "path";
-    from      = "builtins";
+    from      = "laika#lib.libfetch";
+    innerName = "builtins.path";
     # As a function signature
     signature = let
       arg1 = struct {

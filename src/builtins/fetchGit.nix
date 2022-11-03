@@ -18,8 +18,8 @@
 
     __functionMeta = {
       name      = "fetchGitW";
-      from      = "builtins";
-      innerName = "fetchGit";
+      from      = "laika#lib.libfetch";
+      innerName = "builtins.fetchGit";
 
       signature = let
         arg1_attrs = struct {

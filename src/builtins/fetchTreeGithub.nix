@@ -18,8 +18,8 @@
 
     __functionMeta = {
       name      = "fetchTreeGithubW";
-      from      = "builtins";
-      innerName = "fetchTree";
+      from      = "laika#lib.libfetch";
+      innerName = "builtins.fetchTree";
 
       signature = let
         arg1_fields = {

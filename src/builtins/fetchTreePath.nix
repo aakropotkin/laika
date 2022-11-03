@@ -18,8 +18,8 @@
 
     __functionMeta = {
       name      = "fetchTreePathW";
-      from      = "builtins";
-      innerName = "fetchTree";
+      from      = "laika#lib.libfetch";
+      innerName = "builtins.fetchTree";
 
       # NOTE: The actual `builtins.fetchTree' does NOT accept a `url', the
       # handler for that is specific to `flake:inputs' fixup, and we will don't

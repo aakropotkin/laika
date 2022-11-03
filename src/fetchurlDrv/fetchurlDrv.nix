@@ -19,7 +19,7 @@
     __functionMeta = {
       name      = "fetchurlDrvW";
       from      = "laika#lib.libfetch";
-      innerName = "fetchurlDrv";
+      innerName = "laika#lib.libfetch.fetchurlDrv";
 
       signature = let
         hash = yt.eitherN [

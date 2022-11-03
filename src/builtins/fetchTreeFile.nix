@@ -18,8 +18,8 @@
 
     __functionMeta = {
       name      = "fetchTreeFileW";
-      from      = "builtins";
-      innerName = "fetchTree";
+      from      = "laika#lib.libfetch";
+      innerName = "builtins.fetchTree";
 
       signature = let
         arg1 = struct {
