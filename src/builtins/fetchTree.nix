@@ -43,17 +43,26 @@
 
     __innerFunction = builtins.fetchTree;
 
-    __processArgs = self: x: self.__thunk // x;
+    __processArgs = self: { type, ... } @ x: let
+      ti =
+        if type == "path"    then lib.libfetch.fetchTreePathW    else
+        if type == "github"  then lib.libfetch.fetchTreeGithubW  else
+        if type == "git"     then lib.libfetch.fetchTreeGitW     else
+        if type == "tarball" then lib.libfetch.fetchTreeTarballW else
+        if type == "file"    then lib.libfetch.fetchTreeFileW    else
+        throw "TODO: implement remaining wrappers";
+      tm = builtins.intersectAttrs self.__thunk ti.__functionArgs;
+    in tm // x;
 
-    # TODO: mercurial, sourcehut
-    __functor = self: { type, ... } @ args: let
-      fetchInfo  = self.__processArgs self args;
+    # TODO: mercurial, sourcehut, indirect
+    __functor = self: { type, ... } @ x: let
+      fetchInfo  = self.__processArgs self x;
       sourceInfo = self.__innerFunction fetchInfo;
-    in if type == "path"    then lib.libfetch.fetchTreePathW    args      else
-       if type == "github"  then lib.libfetch.fetchTreeGithubW  args      else
+    in if type == "path"    then lib.libfetch.fetchTreePathW    fetchInfo else
+       if type == "github"  then lib.libfetch.fetchTreeGithubW  fetchInfo else
        if type == "git"     then lib.libfetch.fetchTreeGitW     fetchInfo else
-       if type == "tarball" then lib.libfetch.fetchTreeTarballW args      else
-       if type == "file"    then lib.libfetch.fetchTreeFileW    args      else
+       if type == "tarball" then lib.libfetch.fetchTreeTarballW fetchInfo else
+       if type == "file"    then lib.libfetch.fetchTreeFileW    fetchInfo else
        sourceInfo;
   };
 
