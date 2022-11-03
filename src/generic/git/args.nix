@@ -44,7 +44,8 @@
   genericGitArgFields = {
     name  = yt.FS.Strings.filename;  # for `nixpkgs.fetchgit' this is the outdir
     type  = yt.enum ["git" "github" "sourcehut"];
-    url   = yt.FlakeRef.Strings.git_ref;
+    #url   = yt.FlakeRef.Strings.git_ref;
+    url   = yt.Uri.Strings.uri_ref;
     flake = yt.bool;
     inherit (yt.Git) rev ref;     # `branchName' is alias of `ref' for `nixpkgs'
     inherit (yt.Hash.Sums) hash;  # nixpkgs accepts a slew of options.
