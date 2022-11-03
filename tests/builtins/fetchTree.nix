@@ -13,6 +13,8 @@
     fetchTreeGitW
     fetchTreeGithubW
     fetchTreePathW
+    fetchTreeTarballW
+    fetchTreeFileW
   ;
 
 # ---------------------------------------------------------------------------- #
@@ -34,6 +36,16 @@
 
   lodash_path_sourceInfo = {
     inherit (lodash_git_sourceInfo) outPath narHash;
+  };
+
+  lodash_tarball_sourceInfo = {
+    outPath = "/nix/store/x3m3q3wv4w3xqs6bmngmmxqb1hng138z-source";
+    narHash = "sha256-amyN064Yh6psvOfLgcpktd5dRNQStUYHHoIqiI6DMek=";
+  };
+
+  lodash_file_sourceInfo = {
+    outPath = "/nix/store/64icjs49plygl816k6hn23vcmi5ccgsn-source";
+    narHash = "sha256-fn2qMkL7ePPYQyW/x9nvDOl05BDrC7VsfvyfW0xkQyE=";
   };
 
   tests = {
@@ -79,6 +91,32 @@
         rev   = "2da024c3b4f9947a48517639de7560457cd4ec6c";
       };
       expected = lodash_github_sourceInfo;
+    };
+
+
+# ---------------------------------------------------------------------------- #
+
+    testFetchTreeTarball_0 = {
+      # Lodash Tarball SourceInfo
+      expr = fetchTreeTarballW {
+        type    = "tarball";
+        url     = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        narHash = "sha256-amyN064Yh6psvOfLgcpktd5dRNQStUYHHoIqiI6DMek=";
+      };
+      expected = lodash_tarball_sourceInfo;
+    };
+
+
+# ---------------------------------------------------------------------------- #
+
+    testFetchTreeFile_0 = {
+      # Lodash File SourceInfo
+      expr = fetchTreeFileW {
+        type    = "file";
+        url     = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        narHash = "sha256-fn2qMkL7ePPYQyW/x9nvDOl05BDrC7VsfvyfW0xkQyE=";
+      };
+      expected = lodash_file_sourceInfo;
     };
 
 
