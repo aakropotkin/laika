@@ -40,7 +40,7 @@
     };
 
     # Copy the thunk from other fetchers.
-    inherit (fetchGitW) __thunk;
+    inherit (lib.libfetch.fetchTreeGitW) __thunk;
 
     __innerFunction = builtins.fetchTree;
 
@@ -49,7 +49,7 @@
       fa = if builtins.elem type ["tarball" "file"] then {
         url = false;
         # FIXME: only network URLs need `narHash'.
-        #narHash = lib.flocoConfig.enableImpureFetchers;
+        narHash = ! pure;
       } else throw "Unrecognized `fetchTree' type: ${type}";
       fc = { type = false; narHash = true; };
       # Force `type' to appear, and inject the thunk from ``
@@ -59,10 +59,12 @@
     __functor = self: { type, ... } @ args: let
       fetchInfo  = self.__processArgs self args;
       sourceInfo = self.__innerFunction fetchInfo;
-    in if type == "path"   then fetchTreePathW args else
-       if type == "github" then fetchTreeGithubW args else
-       if type == "git"    then fetchTreeGitW args else
-       { inherit fetchInfo sourceInfo type; inherit (sourceInfo) outPath; };
+    in if type == "path"    then lib.libfetch.fetchTreePathW args else
+       if type == "github"  then lib.libfetch.fetchTreeGithubW args else
+       if type == "git"     then lib.libfetch.fetchTreeGitW args else
+       if type == "tarball" then lib.libfetch.fetchTreeTarballW args else
+       if type == "file"    then lib.libfetch.fetchTreeFileW args else
+       sourceInfo;
   };
 
 
