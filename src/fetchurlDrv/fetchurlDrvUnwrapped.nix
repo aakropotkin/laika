@@ -45,8 +45,8 @@ in {
     if md5    != "" then "md5"    else
     "sha256"
 
-, executable ? false
-, unpack     ? false
+, executable    ? false  # may imply that we are fetching a directory
+, unpack        ? false
 , extraAttrs    ? {}
 , extraDrvAttrs ? {}
 }: derivation ( {

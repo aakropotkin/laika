@@ -35,6 +35,14 @@ in {
       genericGitArgsPure
       genericGitArgsImpure
     ;
+
+    inherit (callBuiltin ./generic/url/args.nix {})
+      genericUrlArgFields
+      asGenericUrlArgsPure     asGenericUrlArgsImpure
+      asGenericFileArgsPure    asGenericFileArgsImpure
+      asGenericTarballArgsPure asGenericTarballArgsImpure
+      # FIXME: you don't provide a minimum argset yet.
+    ;
   };
 }
 

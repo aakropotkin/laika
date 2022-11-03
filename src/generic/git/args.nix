@@ -29,6 +29,8 @@
   };
 
 
+# ---------------------------------------------------------------------------- #
+
   # NOTE: If a hostname has a `git@' ( ssh ) prefix, it MUST use a ":", not
   #       "/" to separate the hostname and path.
   #       Nix's `fetchGit' and `fetchTree' do not use a ":" here, so replace
@@ -55,6 +57,9 @@
     repo       = yt.Git.Strings.ref_component;
     owner      = yt.Git.Strings.owner;
   };
+
+
+# ---------------------------------------------------------------------------- #
 
   genericGitArgs' = pure: let
     checkPresent = x: let
