@@ -35,11 +35,12 @@
         s  = builtins.split "/${repo}\\.git" parsed.path;
         s0 = builtins.head s;
         d = if s0 == "" then dirOf parsed.path else s0;
-      in baseNameOf d;
+        b = baseNameOf d;
+      in if builtins.elem b ["" "."] then null else b;
       # FIXME: I think flake-ref do `.../foo.git/<REV>?<QUERY>`
       rev = if parsed.fragment != null then parsed.fragment else
         if parsed ? query.rev then parsed.query.rev else null;
-      #ref = if parsed ? query.ref then parsed.query.ref else null;
+      ref = if parsed ? query.ref then parsed.query.ref else null;
     };
     __processArgs = self: x:
       if builtins.isString x then { url = x; } else {
