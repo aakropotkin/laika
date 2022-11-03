@@ -25,6 +25,7 @@
         hash = yt.eitherN [
           yt.Hash.md5 yt.Hash.sha1 yt.Hash.sha256 yt.Hash.sha512
         ];
+        hashAlgos = yt.enum ["" "sha1" "md5" "sha256" "sha512"];
         arg1_rough = struct {
           url            = yt.Uri.Strings.uri_ref;
           name           = option yt.FS.filename;  # FIXME: storepath filename
@@ -34,7 +35,7 @@
           sha256         = option yt.Hash.sha256;
           sha512         = option yt.Hash.sha512;
           outputHash     = option hash;
-          outputHashAlgo = option yt.enum ["" "sha1" "md5" "sha256" "sha512"];
+          outputHashAlgo = option hashAlgos;
           executable     = option bool;
           unpack         = option bool;
           extraAttrs     = option ( yt.attrs yt.any );
