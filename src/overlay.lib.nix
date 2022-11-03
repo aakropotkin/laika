@@ -12,6 +12,7 @@ final: prev: let
   in args: f ( builtins.intersectAttrs fa ( auto // args ) );
 in {
   libfetch = ( prev.libfetch or {} ) // {
+    fetchTreeW        = callBuiltin ./builtins/fetchTree.nix {};
     fetchTreeGitW     = callBuiltin ./builtins/fetchTreeGit.nix {};
     fetchTreeGithubW  = callBuiltin ./builtins/fetchTreeGithub.nix {};
     fetchTreePathW    = callBuiltin ./builtins/fetchTreePath.nix {};

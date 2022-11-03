@@ -10,6 +10,7 @@
 
   inherit (lib.ytypes) SourceInfo;
   inherit (lib.libfetch)
+    fetchTreeW
     fetchTreeGitW
     fetchTreeGithubW
     fetchTreePathW
@@ -132,6 +133,68 @@
           rev  = "2da024c3b4f9947a48517639de7560457cd4ec6c";
         };
       in fetchTreePathW {
+        type = "path";
+        path = gitTree.outPath;
+        inherit (gitTree) narHash;
+      };
+      expected = lodash_path_sourceInfo;
+    };
+
+
+# ---------------------------------------------------------------------------- #
+
+
+    testFetchTree_Git_0 = {
+      # Lodash Git SourceInfo
+      expr = fetchTreeW {
+        type = "git";
+        url  = "https://github.com/lodash/lodash.git";
+        rev  = "2da024c3b4f9947a48517639de7560457cd4ec6c";
+      };
+      expected = lodash_git_sourceInfo;
+    };
+
+    testFetchTree_Github_0 = {
+      # Lodash Git SourceInfo
+      expr = fetchTreeW {
+        type  = "github";
+        owner = "lodash";
+        repo  = "lodash";
+        rev   = "2da024c3b4f9947a48517639de7560457cd4ec6c";
+      };
+      expected = lodash_github_sourceInfo;
+    };
+
+    testFetchTree_Tarball_0 = {
+      # Lodash Tarball SourceInfo
+      expr = fetchTreeW {
+        type    = "tarball";
+        url     = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        narHash = "sha256-amyN064Yh6psvOfLgcpktd5dRNQStUYHHoIqiI6DMek=";
+      };
+      expected = lodash_tarball_sourceInfo;
+    };
+
+    testFetchTree_File_0 = {
+      # Lodash File SourceInfo
+      expr = fetchTreeW {
+        type    = "file";
+        url     = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
+        narHash = "sha256-fn2qMkL7ePPYQyW/x9nvDOl05BDrC7VsfvyfW0xkQyE=";
+      };
+      expected = lodash_file_sourceInfo;
+    };
+
+    testFetchTree_Path_0 = {
+      # We refetch `lodash' from the Nix store since we already know
+      # its `narHash'.
+      expr = let
+        gitTree = fetchTreeGitW {
+          type = "git";
+          url  = "https://github.com/lodash/lodash.git";
+          rev  = "2da024c3b4f9947a48517639de7560457cd4ec6c";
+        };
+      in fetchTreeW {
         type = "path";
         path = gitTree.outPath;
         inherit (gitTree) narHash;
