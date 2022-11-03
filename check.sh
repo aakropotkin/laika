@@ -12,3 +12,5 @@ $NIX flake check $NIX_FLAGS --system "$SYSTEM" --impure;
 trap '_es="$?"; rm -f ./result; exit "$_es";' HUP TERM EXIT INT QUIT;
 $NIX build .#tests $NIX_FLAGS;
 $NIX build .#tests $NIX_FLAGS --impure;
+$NIX build .#testsT $NIX_FLAGS;
+$NIX build .#testsT $NIX_FLAGS --impure;

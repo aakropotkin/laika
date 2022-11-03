@@ -25,7 +25,7 @@
         arg1_fields = {
           type = yt.enum ["github"];
           inherit (yt.Git) owner repo rev ref;
-          narHash = option yt.Hash.sha256_sri;
+          narHash = option yt.Hash.narHash;
         };
         # In pure mode either `narHash' or `rev' must be specified.
         # In practice `narHash' is worthless because it'll be blown out as soon

@@ -75,3 +75,9 @@ jobs:
           nix build head#tests --show-trace;
           echo "# ---------------------------------------------------------------------------- #" >&2;
           nix build head#tests --show-trace --impure;
+
+      - name: All Tests ( Typechecked )
+        run: |
+          nix build head#testsT --show-trace;
+          echo "# ---------------------------------------------------------------------------- #" >&2;
+          nix build head#testsT --show-trace --impure;

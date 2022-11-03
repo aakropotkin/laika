@@ -7,8 +7,8 @@
 # ---------------------------------------------------------------------------- #
 
 { lib
-, pure     ? lib.inPureEvalMode
-, typcheck ? false
+, pure      ? lib.inPureEvalMode
+, typecheck ? false
 }: let
 
   yt = lib.ytypes // lib.ytypes.Prim // lib.ytypes.Core;
@@ -33,6 +33,11 @@ in {
         sha256    = option yt.Hash.sha256;
       };
     in [arg1 yt.FS.store_path];
+      properties = {
+        inherit pure typecheck;
+        builtin = true;
+        family  = "path";
+      };
   };
 
   __functionArgs = {
