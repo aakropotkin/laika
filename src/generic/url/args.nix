@@ -27,10 +27,10 @@
     # Non-SRI SHA of any encoding.
     # This is dumb but `builtins:fetchurl' cares for some reason.
     sha  = yt.eitherN [
-      yt.Hash.md5_hash
-      yt.Hash.sha1_hash
-      yt.Hash.sha256_hash
-      yt.Hash.sha512_hash
+      yt.Hash.Strings.md5_hash
+      yt.Hash.Strings.sha1_hash
+      yt.Hash.Strings.sha256_hash
+      yt.Hash.Strings.sha512_hash
     ];
   };
 
