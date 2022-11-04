@@ -82,23 +82,32 @@
 
 # ---------------------------------------------------------------------------- #
 
-  in {
-
-# ---------------------------------------------------------------------------- #
-
-    inherit overlays libOverlays ytOverlays;
-    lib = nixpkgs.lib.extend libOverlays.default;
-
-# ---------------------------------------------------------------------------- #
-
     # Installable Packages for Flake CLI.
     packages = rime.lib.eachDefaultSystemMap ( system: let
       pkgsFor  = nixpkgs.legacyPackages.${system}.extend overlays.default;
       pkgsForT = nixpkgs.legacyPackages.${system}.extend overlays.typecheck;
     in {
-      tests  = ( pkgsFor.callPackages ./tests {} ).checkDrv;
-      testsT = ( pkgsForT.callPackages ./tests {} ).checkDrv;
+      tests =
+        ( pkgsFor.callPackages ./tests { nameExtra = "untyped"; } ).checkDrv;
+      testsT =
+        ( pkgsForT.callPackages ./tests { nameExtra = "typed"; } ).checkDrv;
     } );
+
+# ---------------------------------------------------------------------------- #
+
+  in {
+
+# ---------------------------------------------------------------------------- #
+
+    inherit overlays packages libOverlays ytOverlays;
+    lib = nixpkgs.lib.extend libOverlays.default;
+
+# ---------------------------------------------------------------------------- #
+
+    checks = rime.lib.eachDefaultSystemMap ( system: {
+      inherit (packages.${system}) tests testsT;
+    } );
+
 
 # ---------------------------------------------------------------------------- #
 

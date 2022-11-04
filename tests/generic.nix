@@ -51,6 +51,9 @@
         sha        = "amyN064Yh6psvOfLgcpktd5dRNQStUYHHoIqiI6DMek=";
         executable = false;
         flake      = false;
+        unpack        = true;
+        recursive     = true;
+        recursiveHash = true;
       };
     };
 
@@ -68,6 +71,9 @@
         sha        = "fn2qMkL7ePPYQyW/x9nvDOl05BDrC7VsfvyfW0xkQyE=";
         executable = false;
         flake      = false;
+        unpack        = false;
+        recursive     = false;
+        recursiveHash = false;
       };
     };
 

@@ -172,8 +172,7 @@
     in removeAttrs fa ["unpack" "recursive" "recursiveHash" "type"];
     __innerFunction = args: let
       fa = args // { type = "file"; unpack = false; recursive = false; };
-      fu = asGenericUrlArgs' pure fa;
-    in removeAttrs fu ["unpack" "recursive" "recursiveHash"];
+    in asGenericUrlArgs' pure fa;
     __functor = self: x: self.__innerFunction x;
   };
   asGenericFileArgsPure   = asGenericFileArgs' true;
@@ -188,8 +187,7 @@
     in removeAttrs fa ["unpack" "recursive" "recursiveHash" "type"];
     __innerFunction = args: let
       fa = args // { type = "tarball"; unpack = true; recursive = true; };
-      fu = asGenericUrlArgs' pure fa;
-    in removeAttrs fu ["unpack" "recursive" "recursiveHash"];
+    in asGenericUrlArgs' pure fa;
     __functor = self: x: self.__innerFunction x;
   };
   asGenericTarballArgsPure   = asGenericTarballArgs' true;

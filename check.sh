@@ -1,16 +1,21 @@
 #! /usr/bin/env bash
+
 set -eu;
 
-: "${NIX:=nix}";
 : "${NIX_FLAGS:=-L --show-trace}";
+: "${NIX:=nix}";
 : "${SYSTEM:=$( $NIX eval --raw --impure --expr builtins.currentSystem; )}";
+: "${GREP:=grep}";
 
-$NIX flake check $NIX_FLAGS;
-$NIX flake check $NIX_FLAGS --impure;
-$NIX flake check $NIX_FLAGS --system "$SYSTEM";
-$NIX flake check $NIX_FLAGS --system "$SYSTEM" --impure;
-trap '_es="$?"; rm -f ./result; exit "$_es";' HUP TERM EXIT INT QUIT;
-$NIX build .#tests $NIX_FLAGS;
-$NIX build .#tests $NIX_FLAGS --impure;
-$NIX build .#testsT $NIX_FLAGS;
-$NIX build .#testsT $NIX_FLAGS --impure;
+nix_w() {
+  { $NIX "$@" 3>&2 2>&1 1>&3|$GREP -v 'warning: unknown flake output'; }  \
+    3>&2 2>&1 1>&3;
+}
+
+export NIX_CONFIG='
+warn-dirty = false
+';
+#nix_w flake check $NIX_FLAGS;
+#nix_w flake check $NIX_FLAGS --impure;
+nix_w flake check $NIX_FLAGS --system "$SYSTEM";
+nix_w flake check $NIX_FLAGS --system "$SYSTEM" --impure;
