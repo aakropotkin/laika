@@ -1,13 +1,10 @@
 # ============================================================================ #
 #
-#
+# FIXME: not integrated.
 #
 # ---------------------------------------------------------------------------- #
 
-{ lib
-, pure      ? lib.inPureEvalMode
-, typecheck ? false
-}: let
+{ lib }: let
 
   yt  = lib.ytypes // lib.ytypes.Prim // lib.ytypes.Core;
   plt = yt.NpmLock.Structs // yt.NpmLock;

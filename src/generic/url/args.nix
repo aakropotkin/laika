@@ -2,6 +2,8 @@
 #
 # File/Tarball fetching args.
 #
+# FIXME: we don't typecheck currently.
+#
 # ---------------------------------------------------------------------------- #
 
 { lib }: let
@@ -53,8 +55,14 @@
 
   nixpkgsFetchzipArgs      = { url = false; sha256 = false; };
   builtinsFetchTarballArgs = { url = false; sha256 = false; };
+
   # XXX: accepts as a string not an attrset.
-  builtinsFetchurlArgs = { url = false; };
+  builtinsFetchurlArgs0 = { url = false; };
+
+  # sha256 depends on purity.
+  builtinsFetchurlArgs1 = { url = false; sha256 = true; name = true; };
+
+  builtinsFetchTreeUrlArgs = { type = "false"; };
 
 
 # ---------------------------------------------------------------------------- #
@@ -194,12 +202,12 @@ in {
     nixpkgsFetchurlArgs
     nixpkgsFetchzipArgs
     builtinsFetchTarballArgs
-    builtinsFetchurlArgs
     genericUrlArgFields
     asGenericUrlArgs'     asGenericUrlArgsPure     asGenericUrlArgsImpure
     asGenericFileArgs'    asGenericFileArgsPure    asGenericFileArgsImpure
     asGenericTarballArgs' asGenericTarballArgsPure asGenericTarballArgsImpure
   ;
+    builtinsFetchurlArgs = builtinsFetchurlArgs1;
 }
 
 
