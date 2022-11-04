@@ -27,12 +27,12 @@
           name   = option yt.FS.Strings.filename;  # FIXME: store-path filename
           url    = yt.Uri.Strings.uri_ref;
           # CA hash
-          sha256 = if pure then yt.Hash.sha256_sri else
-                   option yt.Hash.sha256_sri;
+          sha256 = if pure then yt.Hash.Strings.sha256_sri else
+                   option yt.Hash.Strings.sha256_sri;
         };
         arg1 = if pure then arg1_attrs else
                yt.either arg1_attrs arg1_str;
-      in [arg1 yt.SourceInfo.tarball];
+      in [arg1 yt.FS.store_path];
 
       properties = {
         inherit pure typecheck;

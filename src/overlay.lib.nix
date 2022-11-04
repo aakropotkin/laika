@@ -94,11 +94,8 @@ in {
     PureUntyped   = mkFetchers { pure = true;  typecheck = false; };
     ImpureTyped   = mkFetchers { pure = false; typecheck = true; };
     ImpureUntyped = mkFetchers { pure = false; typecheck = false; };
-    Typed = mkFetchers { pure = final.lib.inPureEvalMode; typecheck = true; };
-    Untyped = mkFetchers {
-      pure = final.lib.inPureEvalMode;
-      typecheck = false;
-    };
+    Typed   = mkFetchers { pure = final.inPureEvalMode; typecheck = true; };
+    Untyped = mkFetchers { pure = final.inPureEvalMode; typecheck = false; };
 
 
 # ---------------------------------------------------------------------------- #
