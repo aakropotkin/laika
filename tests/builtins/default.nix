@@ -36,6 +36,7 @@
     ./tests.nix
     ./fetchTree.nix
     ./fetchGit.nix
+    ./fetchTarball.nix
     ./path.nix
   ];
 

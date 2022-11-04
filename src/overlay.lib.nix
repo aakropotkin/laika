@@ -36,15 +36,16 @@ final: prev: let
       };
     } );
     fetchers = {
-      fetchTreeW        = callConfigured ./builtins/fetchTree.nix {};
+      fetchGitW         = callConfigured ./builtins/fetchGit.nix {};
+      fetchTarballW     = callConfigured ./builtins/fetchTarball.nix {};
+      fetchTreeFileW    = callConfigured ./builtins/fetchTreeFile.nix {};
       fetchTreeGitW     = callConfigured ./builtins/fetchTreeGit.nix {};
       fetchTreeGithubW  = callConfigured ./builtins/fetchTreeGithub.nix {};
       fetchTreePathW    = callConfigured ./builtins/fetchTreePath.nix {};
       fetchTreeTarballW = callConfigured ./builtins/fetchTreeTarball.nix {};
-      fetchTreeFileW    = callConfigured ./builtins/fetchTreeFile.nix {};
-      fetchGitW         = callConfigured ./builtins/fetchGit.nix {};
-      pathW             = callConfigured ./builtins/path.nix {};
+      fetchTreeW        = callConfigured ./builtins/fetchTree.nix {};
       fetchurlW         = callConfigured ./builtins/fetchurl.nix {};
+      pathW             = callConfigured ./builtins/path.nix {};
       fetchurlDrvW      = callConfigured ./fetchurlDrv/fetchurlDrv.nix {
         inherit (final.libfetch) fetchurlDrv;
       };

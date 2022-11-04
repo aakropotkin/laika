@@ -1,6 +1,8 @@
 # ============================================================================ #
 #
-# fetchurlW
+# fetchTarballW
+#
+# XXX: Setting `name' changes your `sha256' value.
 #
 # ---------------------------------------------------------------------------- #
 
@@ -14,12 +16,12 @@
 
 # ---------------------------------------------------------------------------- #
 
-  fetchurlW = {
+  fetchTarballW = {
 
     __functionMeta = {
-      name      = "fetchurlW";
+      name      = "fetchTarballW";
       from      = "laika#lib.libfetch";
-      innerName = "builtins.fetchurl";
+      innerName = "builtins.fetchTarball";
 
       signature = let
         arg1_str   = yt.Uri.Strings.uri_ref;
@@ -27,8 +29,8 @@
           name   = option yt.FS.Strings.filename;  # FIXME: store-path filename
           url    = yt.Uri.Strings.uri_ref;
           # CA hash
-          sha256 = if pure then yt.Hash.Strings.sha256_sri else
-                   option yt.Hash.Strings.sha256_sri;
+          sha256 = if pure then yt.Hash.Strings.narHash else
+                   option yt.Hash.Strings.narHash;
         };
         arg1 = if pure then arg1_attrs else
                yt.either arg1_attrs arg1_str;
@@ -37,8 +39,7 @@
       properties = {
         inherit pure typecheck;
         builtin          = true;
-        family           = "file";
-        contentAddressed = true;
+        family           = "tarball";
       };
     };
 
@@ -50,7 +51,7 @@
       sha256 = ! pure;
     };
 
-    __innerFunction = builtins.fetchurl;
+    __innerFunction = builtins.fetchTarball;
 
     # Stashed "auto-args" that can be set by users.
     __thunk = {};
@@ -71,7 +72,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-in fetchurlW
+in fetchTarballW
 
 
 # ---------------------------------------------------------------------------- #
