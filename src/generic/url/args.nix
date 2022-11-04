@@ -26,12 +26,13 @@
     hash = yt.Hash.integrity;
     # Non-SRI SHA of any encoding.
     # This is dumb but `builtins:fetchurl' cares for some reason.
-    sha  = yt.eitherN [
-      yt.Hash.Strings.md5_hash
-      yt.Hash.Strings.sha1_hash
-      yt.Hash.Strings.sha256_hash
-      yt.Hash.Strings.sha512_hash
-    ];
+    #sha  = yt.eitherN [
+    #  yt.Hash.Strings.md5_hash
+    #  yt.Hash.Strings.sha1_hash
+    #  yt.Hash.Strings.sha256_hash
+    #  yt.Hash.Strings.sha512_hash
+    #];
+    sha = yt.string;  # XXX: read the usage below there's no reason to check.
   };
 
 
