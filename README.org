@@ -153,7 +153,7 @@ This is a condensed form of the real definition, but a useful reference nonethel
       in lib.canPassStrict self ( self.__thunk // args );
       # The function entry point ends up being minimal.
       __functor = self: x:
-        self.__innerFunction ( self.__processArgs x );
+        self.__innerFunction ( self.__processArgs self x );
     };
     # Customize the fetcher with new auto-args and add logging.
     myGitFetcher = fetchGitW // {
