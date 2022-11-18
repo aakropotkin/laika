@@ -61,7 +61,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-  genericGitArgs' = pure: let
+  genericGitArgs' = { pure ? lib.inPureEvalMode }: let
     checkPresent = x: let
       comm = builtins.intersectAttrs x genericGitArgFields;
     in builtins.all ( k: comm.${k}.check x.${k} ) ( builtins.attrNames comm );
@@ -83,8 +83,8 @@
   in yt.restrict tname cond ( yt.attrs yt.any );
 
 
-  genericGitArgsPure   = genericGitArgs' true;
-  genericGitArgsImpure = genericGitArgs' false;
+  genericGitArgsPure   = genericGitArgs' { pure = true; };
+  genericGitArgsImpure = genericGitArgs' { pure = false; };
 
 
 # ---------------------------------------------------------------------------- #

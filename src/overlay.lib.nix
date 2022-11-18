@@ -80,7 +80,7 @@ in {
     ;
 
     inherit (callLib ./generic/url/args.nix {})
-      genericUrlArgFields
+      genericUrlArgFields      genericUrlArgFieldPreds
       asGenericUrlArgsPure     asGenericUrlArgsImpure
       asGenericFileArgsPure    asGenericFileArgsImpure
       asGenericTarballArgsPure asGenericTarballArgsImpure

@@ -82,6 +82,9 @@
     ;
   };
 
+  genericUrlArgFieldPreds =
+    builtins.mapAttrs ( _: v: v.check ) lib.libfetch.genericUrlArgFields;
+
 
 # ---------------------------------------------------------------------------- #
 
@@ -90,7 +93,7 @@
   # dedicated routine.
   # NOTE: `ak-nix#lib.libenc.sriToHex' also exists if we need it; but AFAIK
   # all of the builtins are able to accept sha256 SRI.
-  asGenericUrlArgs' = pure: {
+  asGenericUrlArgs' = { pure ? lib.inPureEvalMode }: {
     url
   , name       ? "source"
   , type       ? if ( args.unpack or false ) then "tarball" else "file"
@@ -161,38 +164,38 @@
     inherit url type flake unpack executable recursive recursiveHash;
   };
 
-  asGenericUrlArgsPure   = asGenericUrlArgs' true;
-  asGenericUrlArgsImpure = asGenericUrlArgs' false;
+  asGenericUrlArgsPure   = asGenericUrlArgs' { pure = true; };
+  asGenericUrlArgsImpure = asGenericUrlArgs' { pure = false; };
 
 
 # ---------------------------------------------------------------------------- #
 
-  asGenericFileArgs' = pure: {
+  asGenericFileArgs' = { pure ? lib.inPureEvalMode }: {
     __functionArgs = let
-      fa = lib.functionArgs ( asGenericUrlArgs' pure );
+      fa = lib.functionArgs ( asGenericUrlArgs' { inherit pure; } );
     in removeAttrs fa ["unpack" "recursive" "recursiveHash" "type"];
     __innerFunction = args: let
       fa = args // { type = "file"; unpack = false; recursive = false; };
-    in asGenericUrlArgs' pure fa;
+    in asGenericUrlArgs' { inherit pure; } fa;
     __functor = self: x: self.__innerFunction x;
   };
-  asGenericFileArgsPure   = asGenericFileArgs' true;
-  asGenericFileArgsImpure = asGenericFileArgs' false;
+  asGenericFileArgsPure   = asGenericFileArgs' { pure = true; };
+  asGenericFileArgsImpure = asGenericFileArgs' { pure = false; };
 
 
 # ---------------------------------------------------------------------------- #
 
-  asGenericTarballArgs' = pure: {
+  asGenericTarballArgs' = { pure ? lib.inPureEvalMode }: {
     __functionArgs = let
-      fa = lib.functionArgs ( asGenericUrlArgs' pure );
+      fa = lib.functionArgs ( asGenericUrlArgs' { inherit pure; } );
     in removeAttrs fa ["unpack" "recursive" "recursiveHash" "type"];
     __innerFunction = args: let
       fa = args // { type = "tarball"; unpack = true; recursive = true; };
-    in asGenericUrlArgs' pure fa;
+    in asGenericUrlArgs' { inherit pure; } fa;
     __functor = self: x: self.__innerFunction x;
   };
-  asGenericTarballArgsPure   = asGenericTarballArgs' true;
-  asGenericTarballArgsImpure = asGenericTarballArgs' false;
+  asGenericTarballArgsPure   = asGenericTarballArgs' { pure = true; };
+  asGenericTarballArgsImpure = asGenericTarballArgs' { pure = false; };
 
 
 # ---------------------------------------------------------------------------- #
@@ -202,7 +205,7 @@ in {
     nixpkgsFetchurlArgs
     nixpkgsFetchzipArgs
     builtinsFetchTarballArgs
-    genericUrlArgFields
+    genericUrlArgFields   genericUrlArgFieldPreds
     asGenericUrlArgs'     asGenericUrlArgsPure     asGenericUrlArgsImpure
     asGenericFileArgs'    asGenericFileArgsPure    asGenericFileArgsImpure
     asGenericTarballArgs' asGenericTarballArgsPure asGenericTarballArgsImpure
