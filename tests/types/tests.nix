@@ -29,7 +29,7 @@
 
     testSourceInfo_0 = {
       # Lodash Git SourceInfo
-      expr = SourceInfo.sourceInfo.check lodash_git_sourceInfo;
+      expr = SourceInfo.source_info.check lodash_git_sourceInfo;
       expected = true;
     };
 

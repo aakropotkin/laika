@@ -48,7 +48,7 @@
       signature = let
         getArg1 = x: builtins.head x.__functionMeta.signature;
         arg1    = yt.eitherN ( map getArg1 inners );
-      in [arg1 yt.SourceInfo.sourceInfo];
+      in [arg1 yt.SourceInfo.source_info];
 
       properties = {
         inherit pure typecheck;

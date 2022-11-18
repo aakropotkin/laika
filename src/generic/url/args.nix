@@ -14,7 +14,7 @@
 
   hashFields = {
     inherit (yt.Hash)
-      narHash md5 sha1 sha256 sha512
+      md5 sha1 sha256 sha512
       shasum     # Alias of sha1
       integrity  # Any SRI
       # b16      # non-SRI base16 hash of any 4 algos
@@ -23,7 +23,8 @@
       sha256_sri  sha512_sri  sha1_sri  md5_sri
       sha256_hash sha512_hash sha1_hash md5_hash
     ;
-    hash = yt.Hash.integrity;
+    narHash = yt.Hash.nar_hash;
+    hash    = yt.Hash.integrity;
     # Non-SRI SHA of any encoding.
     # This is dumb but `builtins:fetchurl' cares for some reason.
     #sha  = yt.eitherN [

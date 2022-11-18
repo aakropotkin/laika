@@ -30,7 +30,7 @@
         arg1 = struct {
           type    = yt.enum ["path"];
           path    = yt.FS.abspath;
-          narHash = if pure then yt.Hash.narHash else option yt.Hash.narHash;
+          narHash = if pure then yt.Hash.nar_hash else option yt.Hash.nar_hash;
         };
       in [arg1 yt.SourceInfo.path];
 

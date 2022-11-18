@@ -29,8 +29,8 @@
           name   = option yt.FS.Strings.filename;  # FIXME: store-path filename
           url    = yt.Uri.Strings.uri_ref;
           # CA hash
-          sha256 = if pure then yt.Hash.Strings.narHash else
-                   option yt.Hash.Strings.narHash;
+          sha256 = if pure then yt.Hash.Strings.nar_hash else
+                   option yt.Hash.Strings.nar_hash;
         };
         arg1 = if pure then arg1_attrs else
                yt.either arg1_attrs arg1_str;
@@ -38,8 +38,8 @@
 
       properties = {
         inherit pure typecheck;
-        builtin          = true;
-        family           = "tarball";
+        builtin = true;
+        family  = "tarball";
       };
     };
 

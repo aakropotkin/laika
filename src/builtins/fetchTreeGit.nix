@@ -33,7 +33,7 @@
           allRefs    = option bool;  # nixpkgs: sparseCheckout
           submodules = option bool;  # nixpkgs: fetchSubmodules
           shallow    = option bool;  # nixpkgs: deepClone?
-          narHash    = option yt.Hash.narHash;
+          narHash    = option yt.Hash.nar_hash;
         };
       in [arg1 yt.SourceInfo.git];
 

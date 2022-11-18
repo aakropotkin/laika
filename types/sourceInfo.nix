@@ -17,7 +17,7 @@
     # other builtin fetchers.
     siFields = {
       outPath = FS.store_path;
-      narHash = Hash.Strings.sha256_sri;
+      narHash = Hash.Strings.nar_hash;
       # Git/Github/Path/Mercurial/Sourcehut
       lastModified     = int;
       lastModifiedDate = ytypes.Strings.timestamp;
@@ -77,7 +77,8 @@
 
   Eithers = {
 
-    sourceInfo = ( eitherN [
+    # FIXME: use `yt.__internal.typedef''
+    source_info = ( eitherN [
       Structs.git
       Structs.github
       Structs.sourcehut
@@ -89,7 +90,7 @@
       name    = "sourceInfo";
       toError = v: result: let
         pv = ytypes.__internal.prettyPrint v;
-        common = "Expected a sourceInfo struct " +
+        common = "Expected a source_info struct " +
                  "(git|github|sourcehut|mercurial|path|file|tarball), ";
         wrongType = "but value '${pv}' is of type '${builtins.typeOf v}'.";
         notSI = "but value '${pv}' does not align with any sourceInfo schema.";
@@ -97,7 +98,7 @@
       in common + why;
     };
 
-    indirect = Eithers.sourceInfo;
+    indirect = Eithers.source_info;
 
   };
 
@@ -116,7 +117,7 @@ in {
     tarball
   ;
   inherit (Eithers)
-    sourceInfo
+    source_info
     indirect
   ;
 }
