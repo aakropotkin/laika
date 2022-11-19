@@ -46,7 +46,7 @@
     };
 
     __functionArgs = {
-      type       = false;   # Must be "git"
+      type       = false;   # Must be "github"
       owner      = true;
       repo       = true;
       ref        = true;    # Defaults to "refs/heads/HEAD"
