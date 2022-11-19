@@ -17,14 +17,15 @@
   # filter    = option function;
   # recursive = option bool;
   # sha256    = option yt.Hash.sha256;
-  builtinsPath = builtins.head lib.libfetch.pathW.signature;
+  builtinsPath = builtins.head lib.libfetch.pathW.__functionMeta.signature;
 
 
    # type    = yt.enum ["path"];
    # path    = yt.FS.abspath;
    # narHash = if pure then yt.Hash.sha256_sri else
    #           option yt.Hash.sha256_sri;
-   builtinsFetchTreePath = builtins.head lib.libfetch.fetchTreePathW.signature;
+   builtinsFetchTreePath =
+     builtins.head lib.libfetch.fetchTreePathW.__functionMeta.signature;
 
    # Either { type = "path"; path = "..."; } or { url = "path:..."; }
    flakeRefPath = yt.eitherN [yt.flakeRef.Strings.path_ref
@@ -34,22 +35,24 @@
 # ---------------------------------------------------------------------------- #
 
   genericPathArgFields = {
-    inherit (builtinsPath) name path filter;
+    name      = yt.option yt.FS.Strings.filename;
+    path      = yt.FS.abspath;
+    filter    = yt.option yt.function;
     type      = yt.enum ["path"];
     flake     = yt.bool;
     url       = yt.FlakeRef.Strings.path_ref;
     recursive = yt.bool;
     sha256    = yt.Hash.sha256;
-    narHash   = yt.Hash.sha256_sri;
+    narHash   = yt.Hash.nar_hash;
     # I made these up
     basedir = yt.FS.abspath;
-    inherit (yt.FS) relpath;
+    inherit (yt.FS.Strings) relpath;
   };
 
 
 # ---------------------------------------------------------------------------- #
 
-  genericPathFetchFields = removeAttrs genericPath [
+  genericPathFetchFields = removeAttrs genericPathArgFields [
     "flake" "url" "basedir" "relpath"
   ];
 
