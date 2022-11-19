@@ -87,6 +87,12 @@ in {
       # FIXME: you don't provide a minimum argset yet.
     ;
 
+    inherit (callLib ./generic/path/args.nix {})
+      genericPathArgFields
+      genericPathFetchFields  # Drops flake input args
+      processGenericPathArgs
+    ;
+
 
 # ---------------------------------------------------------------------------- #
 
@@ -97,6 +103,14 @@ in {
     ImpureUntyped = mkFetchers { pure = false; typecheck = false; };
     Typed   = mkFetchers { pure = final.inPureEvalMode; typecheck = true; };
     Untyped = mkFetchers { pure = final.inPureEvalMode; typecheck = false; };
+
+
+    # Return configured `laika' fetchers with explicitly specified settings.
+    # These differ from the default `lib.libfetch' routines which may depend on
+    # `laikaConfig' or runtime context.
+    laikaFetchersConfigured = { pure, typecheck }: mkFetchers {
+      inherit pure typecheck;
+    };
 
 
 # ---------------------------------------------------------------------------- #
