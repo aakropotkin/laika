@@ -39,7 +39,7 @@
     # Basically the same as `builtins.path' but you can't pass `name', and must
     # pass `type = "path"'.
     __functionArgs = {
-      type    = false;  # Must be "path"
+      type    = false;  # Must be "tarball"
       url     = false;
       narHash = ! pure;
     };
