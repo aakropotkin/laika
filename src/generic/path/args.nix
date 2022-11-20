@@ -67,7 +67,7 @@
         p = builtins.elemAt m 2;
       in if m == null then url else if p == null then url else p;
       fromRel = let
-        base = __thunk.basedir or
+        base = x.basedir or __thunk.basedir or
                ( throw "You must set basedir to fetch relative paths: ${rel}" );
         rel  = if builtins.isString x then fromUrl else x.relpath or fromUrl;
       in if lib.libpath.isAbspath rel then rel else
