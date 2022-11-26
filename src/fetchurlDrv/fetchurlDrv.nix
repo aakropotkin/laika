@@ -28,7 +28,7 @@
         hashAlgos = yt.enum ["" "sha1" "md5" "sha256" "sha512"];
         arg1_rough = struct "fetchInfo:fetchurlDrv" {
           url            = yt.Uri.Strings.uri_ref;
-          name           = option yt.FS.store_filename;
+          name           = option yt.FS.Strings.store_filename;
           hash           = option hash;
           md5            = option yt.Hash.md5;
           sha1           = option yt.Hash.sha1;
