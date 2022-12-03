@@ -43,11 +43,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1669739841,
-        "narHash": "sha256-JvIIuV0z/s+QdpWFw1dL0s3sr1absEUSGgoSmT/iIU8=",
+        "lastModified": 1670037900,
+        "narHash": "sha256-Pm54E20n5EWrYBlkX7ROhxSvMD0Fw5HhyimX49jvthE=",
         "owner": "aakropotkin",
         "repo": "rime",
-        "rev": "5a0ecdb143a6504e2825fa4d46803791262169b2",
+        "rev": "ecc6264125ab02b4d3ba40c581fd44f083eb3a08",
         "type": "github"
       },
       "original": {
