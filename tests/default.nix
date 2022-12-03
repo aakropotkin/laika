@@ -13,6 +13,12 @@
 , pkgsFor   ? laika.inputs.nixpkgs.legacyPackages.${system}
 , writeText ? pkgsFor.writeText
 
+# Eval Env
+, pure         ? lib.inPureEvalMode
+, ifd          ? ( builtins.currentSystem or null ) == system
+, allowedPaths ? toString ../.
+, typecheck    ? true
+
 # Options
 , keepFailed ? false  # Useful if you run the test explicitly.
 , nameExtra  ? ""
@@ -44,16 +50,16 @@
   # is why we have explicitly provided an alternative `check' as a part
   # of `mkCheckerDrv'.
   harness = let
-    purity = if lib.inPureEvalMode then "pure" else "impure";
-    ne = if nameExtra != "" then " " + nameExtra else "";
-    name = "laika-tests${ne} (${system}, ${purity})";
+    purity = if pure then "pure" else "impure";
+    ne     = if nameExtra != "" then " " + nameExtra else "";
+    name   = "laika-tests${ne} (${system}, ${purity})";
   in lib.libdbg.mkTestHarness {
     inherit name keepFailed tests writeText;
     mkCheckerDrv = {
       __functionArgs  = lib.functionArgs lib.libdbg.mkCheckerDrv;
       __innerFunction = lib.libdbg.mkCheckerDrv;
       __processArgs   = self: args: self.__thunk // args;
-      __thunk = { inherit name keepFailed writeText; };
+      __thunk         = { inherit name keepFailed writeText; };
       __functor = self: x: self.__innerFunction ( self.__processArgs self x );
     };
     checker = name: run: let
