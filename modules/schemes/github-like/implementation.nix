@@ -62,20 +62,22 @@ in {
       pa = builtins.intersectAttrs {
         rev = true; ref = true; host = true;
       } ps;
+      pretty = builtins.unsafeDiscardStringContext url;
       extra = let
         both   = builtins.interSectAttrs rr pa;
-        msgRev = "URL '${url}' contains multiple commit hashes";
-        msgRef = "URL '${url}' contains multiple branch/tag names";
+        msgRev = "URL '" + pretty + "' contains multiple commit hashes";
+        msgRef = "URL '" + pretty + "' contains multiple branch/tag names";
         msg    = let
           msgs = ( if both ? rev then [msgRev] else [] ) ++
                  ( if both ? ref then [msgRef] else [] );
         in builtins.concatStringsSep "\n" msgs;
       in if both == {} then rr // pa else throw msg;
-    in extra // {
-      type  = builtins.head m;
-      owner = builtins.elemAt m 1;
-      owner = builtins.elemAt m 2;
-    };
+      rsl = extra // {
+        type  = builtins.head m;
+        owner = builtins.elemAt m 1;
+        owner = builtins.elemAt m 2;
+      };
+    in builtins.addErrorContext ( "Parsing URL '" + pretty + "'" ) rsl;
 
   };
 
