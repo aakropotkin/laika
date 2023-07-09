@@ -29,73 +29,10 @@
 
 # ---------------------------------------------------------------------------- #
 
-  version = let
-    da_c      = "[[:alpha:]-]";
-    dan_c     = "[[:alnum:]-]";
-    num_p     = "(0|[1-9][[:digit:]]*)";
-    part_p    = "(${num_p}|[0-9]*${da_c}${dan_c}*)";
-    core_p    = "${num_p}(\\.${num_p}(\\.${num_p})?)?";
-    tag_p     = "${part_p}(\\.${part_p})*";
-    build_p   = "${dan_c}+(\\.[[:alnum:]]+)*";
-    version_p = "${core_p}(-${tag_p})?(\\+${build_p})?";
-  in ( nt.strMatching version_p ) // {
-    name        = "version";
-    description = "semantic version number";
-  };
-
-
-# ---------------------------------------------------------------------------- #
-
   uri = nt.str // {
     name        = "URI";
     description = "uniform resource identifier";
   };
-
-
-# ---------------------------------------------------------------------------- #
-
-  descriptor = ( nt.either lib.liblaika.version lib.liblaika.uri ) // {
-    name        = "package descriptor";
-    description = "version or URI";
-  };
-
-
-# ---------------------------------------------------------------------------- #
-
-  ident = ( nt.strMatching "(@[^@/]+/)?[^@/]+" ) // {
-    name        = "package identifier";
-    description = "package identifier/name";
-  };
-
-
-# ---------------------------------------------------------------------------- #
-
-  key = nt.str // {
-    name        = "package key";
-    description = "unique package identifier";
-  };
-
-
-# ---------------------------------------------------------------------------- #
-
-  ltype = ( nt.enum ["file" "link" "dir" "git"] ) // {
-    name        = "lifecycle type";
-    description = "lifecycle type as recognized by `npm`";
-    merge       = lib.liblaika.mergePreferredOption {
-      compare = a: b:
-        if a == "file" then true else if b == "file" then false else
-        if a == "dir"  then true else if b == "dir"  then false else
-        if a == "link" then true else if b == "link" then false else
-        true;
-    };
-  };
-
-
-# ---------------------------------------------------------------------------- #
-
-  # `package.json', `package-lock.json', and other non-`laika' metadata.
-  depAttrs = nt.attrsOf lib.liblaika.descriptor;
-  depMetas = nt.attrsOf ( nt.attrsOf nt.bool );
 
 
 # ---------------------------------------------------------------------------- #
@@ -500,12 +437,6 @@ in {
     jsonAtom jsonValue
 
     uri
-
-    version descriptor
-    ident key
-    ltype
-    depAttrs depMetas
-    binPairs pjsBin
 
     relpath storePath
 
