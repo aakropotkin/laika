@@ -14,17 +14,19 @@
 
 in {
 
-  _file = "<laika>/fetchers/implementation.default.nix";
+  _file = "<laika>/schemes/implementation.default.nix";
 
-  config.fetchers = {
+  config.schemes = {
 
-    settings = {};
-
-    tarball = {};
-    path    = {};
-    git     = {};
-    github  = {};
-    file    = {};
+    indirect  = {};
+    tarball   = {};
+    file      = {};
+    path      = {};
+    git       = {};
+    mercurial = {};
+    github    = {};
+    gitlab    = {};
+    sourcehut = {};
 
   };
 
