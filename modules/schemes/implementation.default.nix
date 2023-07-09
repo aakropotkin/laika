@@ -8,7 +8,11 @@
 
 # ---------------------------------------------------------------------------- #
 
-# TODO
+  # TODO
+
+  nt = lib.types;
+  lt = { inherit (lib.liblaika) inputScheme; };
+
 
 # ---------------------------------------------------------------------------- #
 
@@ -18,15 +22,15 @@ in {
 
   config.schemes = {
 
-    indirect  = {};
-    tarball   = {};
-    file      = {};
-    path      = {};
-    git       = {};
-    mercurial = {};
-    github    = {};
-    gitlab    = {};
-    sourcehut = {};
+    indirect  = [lt.inputScheme];
+    tarball   = [lt.inputScheme];
+    file      = [lt.inputScheme];
+    path      = [lt.inputScheme];
+    git       = [lt.inputScheme];
+    mercurial = [lt.inputScheme];
+    github    = [lt.inputScheme];
+    gitlab    = [lt.inputScheme];
+    sourcehut = [lt.inputScheme];
 
   };
 
