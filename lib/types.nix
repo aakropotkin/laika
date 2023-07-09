@@ -95,7 +95,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-  inputScheme = nt.submodule {
+  inputSchemeDeferred = {
     options = {
 
       name = lib.mkOption {
@@ -182,7 +182,7 @@
 
 # ---------------------------------------------------------------------------- #
 
-  input = nt.submodule {
+  inputDeferred = {
     options = {
 
       schemeName = lib.mkOption {
@@ -437,8 +437,10 @@ in {
     sha256_hash sha256_sri narHash
     rev short_rev
 
-    tree inputScheme input
+    tree inputSchemeDeferred inputDeferred
   ;
+  inputScheme = nt.submodule inputSchemeDeferred;
+  input       = nt.submodule inputDeferred;
 
 }
 

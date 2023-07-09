@@ -11,7 +11,7 @@
   # TODO
 
   nt = lib.types;
-  lt = { inherit (lib.liblaika) inputScheme; };
+  lt = { inherit (lib.liblaika) inputSchemeDeferred; };
 
 
 # ---------------------------------------------------------------------------- #
@@ -28,9 +28,15 @@ in {
     path      = [lt.inputScheme];
     git       = [lt.inputScheme];
     mercurial = [lt.inputScheme];
-    github    = [lt.inputScheme];
-    gitlab    = [lt.inputScheme];
-    sourcehut = [lt.inputScheme];
+    github    = [lt.inputSchemeDeferred ./github-like/implementation.nix];
+    gitlab    = [
+      lt.inputSchemeDeferred ./github-like/implementation.nix
+      { config.name = "gitlab"; }
+    ];
+    sourcehut = [
+      lt.inputSchemeDeferred ./github-like/implementation.nix
+      { config.name = "sourcehut"; }
+    ];
 
   };
 
