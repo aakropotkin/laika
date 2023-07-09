@@ -24,9 +24,13 @@
     };
 
     libOverlays.libfetch = import ./src/overlay.lib.nix;
+    libOverlays.liblaika = import ./lib/overlay.lib.nix;
 
-    libOverlays.laika = nixpkgs.lib.composeExtensions libOverlays.ytypes
-                                                      libOverlays.libfetch;
+    libOverlays.laika = nixpkgs.lib.composeManyExtensions [
+      libOverlays.ytypes
+      libOverlays.libfetch
+      libOverlays.liblaika
+    ];
 
     libOverlays.default = nixpkgs.lib.composeExtensions libOverlays.deps
                                                         libOverlays.laika;

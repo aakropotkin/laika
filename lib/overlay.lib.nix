@@ -46,6 +46,7 @@ final: prev: let
 in {
 
   liblaika = callLibs [
+    ./options.nix
     ./types.nix
   ];
 
