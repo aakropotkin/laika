@@ -50,12 +50,6 @@
 
 # ---------------------------------------------------------------------------- #
 
-  binPairs = nt.attrsOf lib.liblaika.relpath;
-  pjsBin   = nt.either lib.liblaika.relpath lib.liblaika.binPairs;
-
-
-# ---------------------------------------------------------------------------- #
-
   sha256_hash = ( nt.strMatching "[[:xdigit:]]{64}" ) // {
     name        = "SHA-256 hex";
     description = "SHA-256 hash (hexadecimal)";
